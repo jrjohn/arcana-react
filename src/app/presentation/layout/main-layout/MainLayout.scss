@@ -1,0 +1,66 @@
+@use '../../../../styles/variables' as *;
+
+.main-layout {
+  min-height: 100vh;
+  background-color: $light-gray-bg;
+}
+
+// Mobile overlay
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $mobile-overlay;
+  z-index: $z-overlay;
+  animation: fadeIn 0.2s ease-in-out;
+
+  @media (max-width: $breakpoint-tablet) {
+    display: block;
+  }
+}
+
+// Main content area
+.main-content {
+  margin-top: $header-height;
+  margin-left: $sidebar-width;
+  min-height: calc(100vh - #{$header-height});
+  padding: 0;
+  transition: margin-left $transition-base, margin-right $transition-base;
+  background-color: $light-gray-bg;
+
+  // Sidebar collapsed state
+  &.sidebar-collapsed {
+    margin-left: $sidebar-collapsed-width;
+  }
+
+  // Right panel open state
+  &.right-panel-open {
+    margin-right: $right-panel-width;
+  }
+
+  // Tablet & Mobile
+  @media (max-width: $breakpoint-tablet) {
+    margin-left: 0;
+
+    &.sidebar-collapsed {
+      margin-left: 0;
+    }
+
+    &.right-panel-open {
+      margin-right: 0;
+    }
+  }
+}
+
+// Fade in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

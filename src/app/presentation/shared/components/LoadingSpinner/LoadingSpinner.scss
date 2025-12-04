@@ -1,0 +1,44 @@
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loading-spinner-fullpage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 9999;
+}
+
+.spinner-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+.spinner-md {
+  width: 2rem;
+  height: 2rem;
+  border-width: 0.2em;
+}
+
+.spinner-lg {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.25em;
+}
+
+.loading-message {
+  font-size: 0.875rem;
+  margin: 0;
+  text-align: center;
+}

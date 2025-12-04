@@ -1,0 +1,444 @@
+// =============================================================================
+// Arcana React - Main Styles
+// =============================================================================
+
+// Import Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// Import Bootstrap Icons
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Import variables
+@import './variables';
+
+// -----------------------------------------------------------------------------
+// CSS Custom Properties (for runtime theming)
+// -----------------------------------------------------------------------------
+:root {
+  // Layout
+  --header-height: #{$header-height};
+  --sidebar-width: #{$sidebar-width};
+  --sidebar-collapsed-width: #{$sidebar-collapsed-width};
+  --right-panel-width: #{$right-panel-width};
+
+  // Colors
+  --primary: #{$primary-blue};
+  --border-color: #{$border-gray};
+  --bg-light: #{$light-gray-bg};
+  --text-primary: #{$dark-gray-text};
+  --text-secondary: #{$secondary-gray};
+  --text-heading: #{$darker-gray};
+
+  // Transitions
+  --transition-base: #{$transition-base};
+}
+
+// -----------------------------------------------------------------------------
+// Reset & Base Styles
+// -----------------------------------------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: $dark-gray-text;
+  background-color: $light-gray-bg;
+  overflow-x: hidden;
+}
+
+// -----------------------------------------------------------------------------
+// Typography
+// -----------------------------------------------------------------------------
+h1, h2, h3, h4, h5, h6 {
+  color: $darker-gray;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+a {
+  color: $primary-blue;
+  text-decoration: none;
+
+  &:hover {
+    color: darken($primary-blue, 10%);
+    text-decoration: underline;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Utility Classes
+// -----------------------------------------------------------------------------
+.text-muted {
+  color: $secondary-gray !important;
+}
+
+.bg-light {
+  background-color: $light-gray-bg !important;
+}
+
+// Gradient backgrounds for stat cards
+.bg-gradient-purple {
+  background: $gradient-purple;
+}
+
+.bg-gradient-green {
+  background: $gradient-green;
+}
+
+.bg-gradient-orange {
+  background: $gradient-orange;
+}
+
+.bg-gradient-cyan {
+  background: $gradient-cyan;
+}
+
+// -----------------------------------------------------------------------------
+// Custom Scrollbar
+// -----------------------------------------------------------------------------
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: $light-gray-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $medium-gray;
+  border-radius: 3px;
+
+  &:hover {
+    background: $secondary-gray;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Animation Keyframes
+// -----------------------------------------------------------------------------
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// -----------------------------------------------------------------------------
+// Form Controls Override
+// -----------------------------------------------------------------------------
+.form-control {
+  border-color: $medium-gray;
+
+  &:focus {
+    border-color: $primary-blue;
+    box-shadow: 0 0 0 0.2rem rgba($primary-blue, 0.25);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Button Overrides
+// -----------------------------------------------------------------------------
+.btn {
+  border-radius: $border-radius;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-primary {
+  background-color: $primary-blue;
+  border-color: $primary-blue;
+
+  &:hover {
+    background-color: darken($primary-blue, 7%);
+    border-color: darken($primary-blue, 10%);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Card Overrides
+// -----------------------------------------------------------------------------
+.card {
+  border: 1px solid $border-gray;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+.card-header {
+  background-color: $white;
+  border-bottom: 1px solid $border-gray;
+}
+
+// -----------------------------------------------------------------------------
+// Table Overrides
+// -----------------------------------------------------------------------------
+.table {
+  th {
+    background: linear-gradient(180deg, $light-gray-bg 0%, darken($light-gray-bg, 3%) 100%);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $secondary-gray;
+    border-bottom: 2px solid $border-gray;
+  }
+
+  td {
+    vertical-align: middle;
+    border-bottom: 1px solid $light-border;
+  }
+
+  tbody tr {
+    transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+
+    &:hover {
+      background-color: $row-hover-blue;
+      transform: translateY(-1px);
+    }
+
+    &:nth-child(even) {
+      background-color: $light-gray-bg;
+
+      &:hover {
+        background-color: $row-hover-blue;
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Badge Overrides
+// -----------------------------------------------------------------------------
+.badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+// -----------------------------------------------------------------------------
+// Progress Bar Overrides
+// -----------------------------------------------------------------------------
+.progress {
+  height: 0.5rem;
+  border-radius: $border-radius-sm;
+  background-color: $medium-gray;
+}
+
+// -----------------------------------------------------------------------------
+// Dropdown Overrides
+// -----------------------------------------------------------------------------
+.dropdown-menu {
+  border: 1px solid $border-gray;
+  box-shadow: $shadow-lg;
+  border-radius: $border-radius-lg;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+
+  &:hover {
+    background-color: $light-gray-bg;
+  }
+
+  &:active, &.active {
+    background-color: $primary-blue;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Alert Overrides
+// -----------------------------------------------------------------------------
+.alert {
+  border-radius: $border-radius;
+}
+
+// -----------------------------------------------------------------------------
+// Pagination Overrides
+// -----------------------------------------------------------------------------
+.pagination {
+  .page-link {
+    border-color: $border-gray;
+    color: $dark-gray-text;
+
+    &:hover {
+      background-color: $light-gray-bg;
+      border-color: $border-gray;
+    }
+  }
+
+  .page-item.active .page-link {
+    background-color: $primary-blue;
+    border-color: $primary-blue;
+  }
+
+  .page-item.disabled .page-link {
+    color: $secondary-gray;
+    background-color: $white;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Avatar Styles
+// -----------------------------------------------------------------------------
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radius-circle;
+  background-color: $primary-blue;
+  color: $white;
+  font-weight: 500;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.avatar-sm {
+    width: $avatar-header;
+    height: $avatar-header;
+    font-size: 0.875rem;
+  }
+
+  &.avatar-md {
+    width: $avatar-sidebar;
+    height: $avatar-sidebar;
+    font-size: 1.125rem;
+  }
+
+  &.avatar-lg {
+    width: $avatar-large;
+    height: $avatar-large;
+    font-size: 1.5rem;
+  }
+
+  &.avatar-xl {
+    width: $avatar-detail;
+    height: $avatar-detail;
+    font-size: 2.5rem;
+  }
+
+  &.avatar-table {
+    width: $avatar-table;
+    height: $avatar-table;
+    font-size: 1rem;
+  }
+}
+
+// Status indicator
+.status-indicator {
+  width: $status-indicator;
+  height: $status-indicator;
+  border-radius: $border-radius-circle;
+  border: 2px solid $white;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  &.online { background-color: $success-green; }
+  &.away { background-color: $warning-yellow; }
+  &.busy { background-color: $danger-red; }
+  &.offline { background-color: $info-gray; }
+}
+
+// -----------------------------------------------------------------------------
+// Loading Spinner
+// -----------------------------------------------------------------------------
+.loading-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner 0.75s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+// -----------------------------------------------------------------------------
+// Empty State
+// -----------------------------------------------------------------------------
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: $secondary-gray;
+
+  .empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  .empty-state-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: $dark-gray-text;
+  }
+
+  .empty-state-message {
+    font-size: 0.875rem;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Responsive Utilities
+// -----------------------------------------------------------------------------
+@media (max-width: $breakpoint-mobile) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: $breakpoint-tablet) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: $breakpoint-tablet + 1) {
+  .show-mobile-only {
+    display: none !important;
+  }
+}

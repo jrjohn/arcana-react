@@ -1,0 +1,168 @@
+@use '../../../../../styles/variables' as *;
+
+.user-list-page {
+  .page-header {
+    @media (max-width: $breakpoint-tablet) {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 1rem;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Search Box
+.search-box {
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $secondary-gray;
+    z-index: 1;
+  }
+
+  .search-input {
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+    border-radius: 2rem;
+    border-color: $border-gray;
+
+    &:focus {
+      border-color: $primary-blue;
+      box-shadow: 0 0 0 0.2rem rgba($primary-blue, 0.1);
+    }
+  }
+
+  .clear-search {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $secondary-gray;
+    padding: 0.25rem;
+
+    &:hover {
+      color: $danger-red;
+    }
+  }
+}
+
+// Table
+.table {
+  th {
+    background: linear-gradient(180deg, $light-gray-bg 0%, darken($light-gray-bg, 3%) 100%);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $secondary-gray;
+    border-bottom: 2px solid $border-gray;
+    padding: 0.875rem 1rem;
+  }
+
+  td {
+    vertical-align: middle;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid $light-border;
+  }
+
+  tbody tr {
+    transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+
+    &:hover {
+      background-color: $row-hover-blue;
+      transform: translateY(-1px);
+    }
+
+    &:nth-child(even) {
+      background-color: $light-gray-bg;
+
+      &:hover {
+        background-color: $row-hover-blue;
+      }
+    }
+  }
+}
+
+// User Avatars
+.user-avatar {
+  width: $avatar-table;
+  height: $avatar-table;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-avatar-lg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary-blue;
+  color: $white;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+// User Card (Mobile)
+.user-card {
+  border: none;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+
+// Spin Animation
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+// Button Group
+.btn-group-sm {
+  .btn {
+    padding: 0.375rem 0.625rem;
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Pagination
+.pagination {
+  .page-link {
+    border-color: $border-gray;
+    color: $dark-gray-text;
+    padding: 0.5rem 0.875rem;
+
+    &:hover {
+      background-color: $light-gray-bg;
+      border-color: $border-gray;
+    }
+  }
+
+  .page-item.active .page-link {
+    background-color: $primary-blue;
+    border-color: $primary-blue;
+  }
+
+  .page-item.disabled .page-link {
+    color: $secondary-gray;
+    background-color: $white;
+  }
+}

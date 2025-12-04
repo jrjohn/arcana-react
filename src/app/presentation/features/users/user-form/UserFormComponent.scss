@@ -1,0 +1,47 @@
+@use '../../../../../styles/variables' as *;
+
+.user-form-page {
+  .form-label {
+    font-weight: 500;
+    color: $dark-gray-text;
+  }
+
+  .form-control {
+    &:focus {
+      border-color: $primary-blue;
+      box-shadow: 0 0 0 0.2rem rgba($primary-blue, 0.1);
+    }
+
+    &.is-invalid {
+      border-color: $danger-red;
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba($danger-red, 0.1);
+      }
+    }
+  }
+
+  .invalid-feedback {
+    font-size: 0.8125rem;
+  }
+}
+
+.avatar-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: $primary-blue;
+  color: $white;
+  font-weight: 500;
+  font-size: 1.25rem;
+  border-radius: 50%;
+}
