@@ -6,15 +6,16 @@ import type { User, CreateUserDto, UpdateUserDto, PaginatedResponse } from '@/ap
 
 /**
  * User DTO from API (snake_case from backend)
+ * Note: reqres.in returns numeric id and no timestamp fields
  */
 export interface UserApiDto {
-  id: string
+  id: number | string
   email: string
   first_name: string
   last_name: string
   avatar?: string
-  created_at: string
-  updated_at: string
+  created_at?: string
+  updated_at?: string
 }
 
 /**
@@ -37,14 +38,15 @@ export const userMapper = {
    * Map API DTO to Domain Model
    */
   toDomain(dto: UserApiDto): User {
+    const now = new Date()
     return {
-      id: dto.id,
+      id: String(dto.id),
       email: dto.email,
       firstName: dto.first_name,
       lastName: dto.last_name,
       avatar: dto.avatar,
-      createdAt: new Date(dto.created_at),
-      updatedAt: new Date(dto.updated_at),
+      createdAt: dto.created_at ? new Date(dto.created_at) : now,
+      updatedAt: dto.updated_at ? new Date(dto.updated_at) : now,
     }
   },
 
@@ -65,8 +67,8 @@ export const userMapper = {
       first_name: user.firstName,
       last_name: user.lastName,
       avatar: user.avatar,
-      created_at: user.createdAt.toISOString(),
-      updated_at: user.updatedAt.toISOString(),
+      created_at: user.createdAt?.toISOString(),
+      updated_at: user.updatedAt?.toISOString(),
     }
   },
 

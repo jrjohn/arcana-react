@@ -1,81 +1,29 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+// =============================================================================
+// User Detail Component
+// =============================================================================
+// Presentation layer component that uses UserDetailViewModel for all business logic.
+// This component only handles UI rendering - no direct API calls.
+// Follows UDF pattern: dispatch Input actions, render from Output state.
+// =============================================================================
+
+import { useParams, Link } from 'react-router-dom'
 import { useI18n } from '@core/providers/I18nProvider'
-
-interface User {
-  id: number
-  email: string
-  first_name: string
-  last_name: string
-  avatar: string
-}
-
-// Mock data for fallback when API is unavailable
-const MOCK_USERS: User[] = [
-  { id: 1, email: 'george.bluth@reqres.in', first_name: 'George', last_name: 'Bluth', avatar: 'https://reqres.in/img/faces/1-image.jpg' },
-  { id: 2, email: 'janet.weaver@reqres.in', first_name: 'Janet', last_name: 'Weaver', avatar: 'https://reqres.in/img/faces/2-image.jpg' },
-  { id: 3, email: 'emma.wong@reqres.in', first_name: 'Emma', last_name: 'Wong', avatar: 'https://reqres.in/img/faces/3-image.jpg' },
-  { id: 4, email: 'eve.holt@reqres.in', first_name: 'Eve', last_name: 'Holt', avatar: 'https://reqres.in/img/faces/4-image.jpg' },
-  { id: 5, email: 'charles.morris@reqres.in', first_name: 'Charles', last_name: 'Morris', avatar: 'https://reqres.in/img/faces/5-image.jpg' },
-  { id: 6, email: 'tracey.ramos@reqres.in', first_name: 'Tracey', last_name: 'Ramos', avatar: 'https://reqres.in/img/faces/6-image.jpg' },
-  { id: 7, email: 'michael.lawson@reqres.in', first_name: 'Michael', last_name: 'Lawson', avatar: 'https://reqres.in/img/faces/7-image.jpg' },
-  { id: 8, email: 'lindsay.ferguson@reqres.in', first_name: 'Lindsay', last_name: 'Ferguson', avatar: 'https://reqres.in/img/faces/8-image.jpg' },
-  { id: 9, email: 'tobias.funke@reqres.in', first_name: 'Tobias', last_name: 'Funke', avatar: 'https://reqres.in/img/faces/9-image.jpg' },
-  { id: 10, email: 'byron.fields@reqres.in', first_name: 'Byron', last_name: 'Fields', avatar: 'https://reqres.in/img/faces/10-image.jpg' },
-  { id: 11, email: 'george.edwards@reqres.in', first_name: 'George', last_name: 'Edwards', avatar: 'https://reqres.in/img/faces/11-image.jpg' },
-  { id: 12, email: 'rachel.howell@reqres.in', first_name: 'Rachel', last_name: 'Howell', avatar: 'https://reqres.in/img/faces/12-image.jpg' },
-]
+import { useUserDetailViewModel } from '../viewmodels/userDetailViewModel'
 
 export function UserDetailComponent() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const { t } = useI18n()
 
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // Use ViewModel - UDF Input/Output pattern
+  const { output, dispatch } = useUserDetailViewModel(id || '')
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      setIsLoading(true)
-      setError(null)
+  // ==========================================================================
+  // Helper Functions
+  // ==========================================================================
 
-      try {
-        const response = await fetch(`https://reqres.in/api/users/${id}`)
-        if (!response.ok) {
-          throw new Error('API not available')
-        }
-        const data = await response.json()
-        if (data.data) {
-          setUser(data.data)
-        } else {
-          throw new Error('Invalid response')
-        }
-      } catch {
-        // Fallback to mock data when API fails
-        console.log('API unavailable, using mock data')
-        const mockUser = MOCK_USERS.find(u => u.id === Number(id))
-        if (mockUser) {
-          setUser(mockUser)
-        } else {
-          setError(t('error.not.found'))
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (id) {
-      fetchUser()
-    }
-  }, [id, t])
-
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
-  }
-
-  const formatDate = () => {
-    return new Date().toLocaleDateString('en-US', {
+  const formatDate = (date?: Date) => {
+    if (!date) return 'N/A'
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -84,12 +32,40 @@ export function UserDetailComponent() {
     })
   }
 
+  // ==========================================================================
+  // Event Handlers - dispatch Input actions
+  // ==========================================================================
+
+  const handleDelete = async () => {
+    if (output.user && window.confirm(t('user.delete.message', { name: output.fullName }))) {
+      dispatch({ type: 'DELETE_USER' })
+    }
+  }
+
+  const handleNavigateToList = () => {
+    dispatch({ type: 'NAVIGATE_TO_LIST' })
+  }
+
+  const handleNavigateToEdit = () => {
+    if (output.user) {
+      dispatch({ type: 'NAVIGATE_TO_EDIT', id: output.user.id })
+    }
+  }
+
+  const handleDismissError = () => {
+    dispatch({ type: 'DISMISS_ERROR' })
+  }
+
+  // ==========================================================================
+  // Render - driven by Output state
+  // ==========================================================================
+
   return (
     <div className="user-detail-page container-fluid py-4">
       {/* Back Button */}
       <button
         className="btn btn-outline-secondary mb-3"
-        onClick={() => navigate('/users')}
+        onClick={handleNavigateToList}
       >
         <i className="bi bi-arrow-left me-2"></i>
         {t('common.back')}
@@ -103,17 +79,25 @@ export function UserDetailComponent() {
         </div>
       </div>
 
+      {/* Success Alert */}
+      {output.successMessage && (
+        <div className="alert alert-success fade show" role="alert">
+          <i className="bi bi-check-circle me-2"></i>
+          {output.successMessage}
+        </div>
+      )}
+
       {/* Error Alert */}
-      {error && (
+      {output.error && (
         <div className="alert alert-danger alert-dismissible fade show" role="alert">
           <i className="bi bi-exclamation-triangle me-2"></i>
-          {error}
-          <button type="button" className="btn-close" onClick={() => setError(null)}></button>
+          {output.error}
+          <button type="button" className="btn-close" onClick={handleDismissError}></button>
         </div>
       )}
 
       {/* Loading State */}
-      {isLoading && (
+      {output.isLoading && (
         <div className="text-center py-5">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">{t('common.loading')}</span>
@@ -123,15 +107,15 @@ export function UserDetailComponent() {
       )}
 
       {/* User Detail Card */}
-      {!isLoading && user && (
+      {!output.isLoading && output.user && (
         <div className="row">
           <div className="col-lg-8">
             <div className="card">
               <div className="card-body text-center py-4">
-                {user.avatar ? (
+                {output.user.avatar ? (
                   <img
-                    src={user.avatar}
-                    alt={`${user.first_name} ${user.last_name}`}
+                    src={output.user.avatar}
+                    alt={output.fullName}
                     className="rounded-circle mb-3"
                     style={{ width: '120px', height: '120px', objectFit: 'cover' }}
                   />
@@ -140,13 +124,13 @@ export function UserDetailComponent() {
                     className="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3"
                     style={{ width: '120px', height: '120px', fontSize: '2.5rem' }}
                   >
-                    {getInitials(user.first_name, user.last_name)}
+                    {output.initials}
                   </div>
                 )}
-                <h4>{user.first_name} {user.last_name}</h4>
+                <h4>{output.fullName}</h4>
                 <p className="text-muted">
                   <i className="bi bi-envelope me-2"></i>
-                  {user.email}
+                  {output.user.email}
                 </p>
 
                 <hr className="my-4" />
@@ -158,7 +142,7 @@ export function UserDetailComponent() {
                       <i className="bi bi-person-badge text-primary me-3" style={{ fontSize: '1.25rem' }}></i>
                       <div>
                         <small className="text-muted">{t('user.detail.user.id')}</small>
-                        <div className="fw-semibold">#{user.id}</div>
+                        <div className="fw-semibold">#{output.user.id}</div>
                       </div>
                     </div>
                   </div>
@@ -167,7 +151,7 @@ export function UserDetailComponent() {
                       <i className="bi bi-person text-primary me-3" style={{ fontSize: '1.25rem' }}></i>
                       <div>
                         <small className="text-muted">{t('user.detail.first.name')}</small>
-                        <div className="fw-semibold">{user.first_name}</div>
+                        <div className="fw-semibold">{output.user.firstName}</div>
                       </div>
                     </div>
                   </div>
@@ -176,7 +160,7 @@ export function UserDetailComponent() {
                       <i className="bi bi-person-fill text-primary me-3" style={{ fontSize: '1.25rem' }}></i>
                       <div>
                         <small className="text-muted">{t('user.detail.last.name')}</small>
-                        <div className="fw-semibold">{user.last_name}</div>
+                        <div className="fw-semibold">{output.user.lastName}</div>
                       </div>
                     </div>
                   </div>
@@ -185,7 +169,7 @@ export function UserDetailComponent() {
                       <i className="bi bi-envelope text-primary me-3" style={{ fontSize: '1.25rem' }}></i>
                       <div>
                         <small className="text-muted">{t('user.detail.email.address')}</small>
-                        <div className="fw-semibold">{user.email}</div>
+                        <div className="fw-semibold">{output.user.email}</div>
                       </div>
                     </div>
                   </div>
@@ -194,7 +178,7 @@ export function UserDetailComponent() {
                       <i className="bi bi-calendar-plus text-primary me-3" style={{ fontSize: '1.25rem' }}></i>
                       <div>
                         <small className="text-muted">{t('user.detail.created.at')}</small>
-                        <div className="fw-semibold">{formatDate()}</div>
+                        <div className="fw-semibold">{formatDate(output.user.createdAt)}</div>
                       </div>
                     </div>
                   </div>
@@ -203,17 +187,17 @@ export function UserDetailComponent() {
                       <i className="bi bi-calendar-check text-primary me-3" style={{ fontSize: '1.25rem' }}></i>
                       <div>
                         <small className="text-muted">{t('user.detail.updated.at')}</small>
-                        <div className="fw-semibold">{formatDate()}</div>
+                        <div className="fw-semibold">{formatDate(output.user.updatedAt)}</div>
                       </div>
                     </div>
                   </div>
-                  {user.avatar && (
+                  {output.user.avatar && (
                     <div className="col-12 mb-3">
                       <div className="d-flex align-items-center">
                         <i className="bi bi-image text-primary me-3" style={{ fontSize: '1.25rem' }}></i>
                         <div style={{ overflow: 'hidden' }}>
                           <small className="text-muted">{t('user.detail.avatar.url')}</small>
-                          <div className="fw-semibold text-truncate">{user.avatar}</div>
+                          <div className="fw-semibold text-truncate">{output.user.avatar}</div>
                         </div>
                       </div>
                     </div>
@@ -225,10 +209,32 @@ export function UserDetailComponent() {
                   <i className="bi bi-arrow-left me-2"></i>
                   {t('user.detail.back.to.list')}
                 </Link>
-                <Link to={`/users/${user.id}/edit`} className="btn btn-primary">
-                  <i className="bi bi-pencil me-2"></i>
-                  {t('user.detail.edit.user')}
-                </Link>
+                <div className="btn-group">
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={handleDelete}
+                    disabled={output.isDeleting}
+                  >
+                    {output.isDeleting ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                        {t('common.deleting')}
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-trash me-2"></i>
+                        {t('common.delete')}
+                      </>
+                    )}
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleNavigateToEdit}
+                  >
+                    <i className="bi bi-pencil me-2"></i>
+                    {t('user.detail.edit.user')}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

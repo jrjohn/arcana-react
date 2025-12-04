@@ -1,7 +1,20 @@
-import { useState, useCallback } from 'react'
+// =============================================================================
+// Sidebar Component
+// =============================================================================
+// Uses NavGraph for navigation structure. All routes are defined in
+// @core/navigation/navGraph.ts for centralized management.
+// =============================================================================
+
+import { useState, useCallback, useMemo } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '@core/providers/AuthProvider'
 import { useI18n } from '@core/providers/I18nProvider'
+import {
+  buildNavigation,
+  isChildRouteActive,
+  type NavItem,
+  Routes,
+} from '@core/navigation'
 import './Sidebar.scss'
 
 interface SidebarProps {
@@ -10,105 +23,27 @@ interface SidebarProps {
   onCloseMobile: () => void
 }
 
-interface MenuItem {
-  id: string
-  labelKey: string
-  icon: string
-  route?: string
-  badge?: string
-  badgeClass?: string
-  children?: MenuItem[]
-}
-
-const menuItems: MenuItem[] = [
-  {
-    id: 'dashboard',
-    labelKey: 'nav.home',
-    icon: 'bi bi-house-door',
-    route: '/home',
-  },
-  {
-    id: 'users',
-    labelKey: 'nav.users',
-    icon: 'bi bi-people',
-    route: '/users',
-  },
-  {
-    id: 'projects',
-    labelKey: 'nav.projects',
-    icon: 'bi bi-folder',
-    children: [
-      { id: 'projects-all', labelKey: 'nav.projects.all', icon: 'bi bi-folder2', route: '/projects' },
-      { id: 'projects-create', labelKey: 'nav.projects.create', icon: 'bi bi-folder-plus', route: '/projects/new' },
-      { id: 'projects-archived', labelKey: 'nav.projects.archived', icon: 'bi bi-archive', route: '/projects/archived' },
-    ],
-  },
-  {
-    id: 'tasks',
-    labelKey: 'nav.tasks',
-    icon: 'bi bi-list-check',
-    children: [
-      { id: 'tasks-my', labelKey: 'nav.tasks.my', icon: 'bi bi-person-check', route: '/tasks' },
-      { id: 'tasks-recent', labelKey: 'nav.tasks.recent', icon: 'bi bi-clock-history', route: '/tasks/recent' },
-      { id: 'tasks-important', labelKey: 'nav.tasks.important', icon: 'bi bi-star', route: '/tasks/important' },
-    ],
-  },
-  {
-    id: 'calendar',
-    labelKey: 'nav.calendar',
-    icon: 'bi bi-calendar',
-    route: '/calendar',
-  },
-  {
-    id: 'messages',
-    labelKey: 'nav.messages',
-    icon: 'bi bi-chat-dots',
-    route: '/messages',
-    badge: '5',
-    badgeClass: 'bg-danger',
-  },
-  {
-    id: 'documents',
-    labelKey: 'nav.documents',
-    icon: 'bi bi-file-earmark-text',
-    route: '/documents',
-  },
-  {
-    id: 'analytics',
-    labelKey: 'nav.analytics',
-    icon: 'bi bi-bar-chart',
-    children: [
-      { id: 'analytics-overview', labelKey: 'nav.analytics.overview', icon: 'bi bi-graph-up', route: '/analytics' },
-      { id: 'analytics-reports', labelKey: 'nav.analytics.reports', icon: 'bi bi-file-bar-graph', route: '/analytics/reports' },
-      { id: 'analytics-performance', labelKey: 'nav.analytics.performance', icon: 'bi bi-speedometer2', route: '/analytics/performance' },
-    ],
-  },
-  {
-    id: 'settings',
-    labelKey: 'nav.settings',
-    icon: 'bi bi-gear',
-    route: '/settings',
-  },
-]
-
 export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) {
   const { currentUser } = useAuth()
   const { t } = useI18n()
   const location = useLocation()
 
+  // Build navigation from NavGraph
+  const menuItems = useMemo(() => buildNavigation(), [])
+
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(() => {
     // Auto-expand menu that contains the current route
     const initialExpanded = new Set<string>()
-    menuItems.forEach(item => {
-      if (item.children?.some(child => location.pathname.startsWith(child.route || ''))) {
+    menuItems.forEach((item) => {
+      if (item.children && isChildRouteActive(location.pathname, item.id)) {
         initialExpanded.add(item.id)
       }
     })
     return initialExpanded
   })
 
-  const toggleMenuItem = useCallback((item: MenuItem) => {
-    setExpandedMenus(prev => {
+  const toggleMenuItem = useCallback((item: NavItem) => {
+    setExpandedMenus((prev) => {
       const newSet = new Set(prev)
       if (newSet.has(item.id)) {
         newSet.delete(item.id)
@@ -119,7 +54,7 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
     })
   }, [])
 
-  const isMenuExpanded = (item: MenuItem) => expandedMenus.has(item.id)
+  const isMenuExpanded = (item: NavItem) => expandedMenus.has(item.id)
 
   const getStatusClass = (status: string) => `status-${status}`
 
@@ -139,11 +74,7 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
         <div className="user-profile-content">
           <div className="user-avatar-wrapper">
             {currentUser?.avatar ? (
-              <img
-                src={currentUser.avatar}
-                alt={userName}
-                className="user-avatar"
-              />
+              <img src={currentUser.avatar} alt={userName} className="user-avatar" />
             ) : (
               <div className="user-avatar avatar-initials">
                 {userName.charAt(0).toUpperCase()}
@@ -158,20 +89,23 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
             <div className="user-info">
               <div className="user-name">{userName}</div>
               <div className="user-email">{currentUser?.email}</div>
-              <div><span className="badge bg-primary user-role-badge">{currentUser?.role}</span></div>
+              <div>
+                <span className="badge bg-primary user-role-badge">{currentUser?.role}</span>
+              </div>
             </div>
           )}
         </div>
         {!collapsed && (
           <div className="user-profile-actions">
-            <button
-              type="button"
+            <NavLink
+              to={Routes.PROFILE}
               className="btn btn-sm btn-outline-primary w-100"
               title={t('nav.profile')}
+              onClick={handleNavClick}
             >
               <i className="bi bi-person me-1"></i>
               {t('nav.profile')}
-            </button>
+            </NavLink>
           </div>
         )}
       </div>
@@ -179,10 +113,8 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
       {/* Navigation Menu */}
       <nav className="sidebar-nav">
         <div className="nav-section">
-          {!collapsed && (
-            <div className="nav-section-title">{t('nav.main.menu')}</div>
-          )}
-          {menuItems.map(item => (
+          {!collapsed && <div className="nav-section-title">{t('nav.main.menu')}</div>}
+          {menuItems.map((item) => (
             <div key={item.id}>
               {item.children ? (
                 /* Parent menu item with children */
@@ -197,13 +129,15 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
                     {!collapsed && (
                       <>
                         <span className="nav-label">{t(item.labelKey)}</span>
-                        <i className={`bi bi-chevron-down nav-arrow ${isMenuExpanded(item) ? 'rotated' : ''}`}></i>
+                        <i
+                          className={`bi bi-chevron-down nav-arrow ${isMenuExpanded(item) ? 'rotated' : ''}`}
+                        ></i>
                       </>
                     )}
                   </button>
                   {!collapsed && (
                     <div className={`nav-submenu ${isMenuExpanded(item) ? 'show' : ''}`}>
-                      {item.children.map(child => (
+                      {item.children.map((child) => (
                         <NavLink
                           key={child.id}
                           to={child.route || '#'}
@@ -214,6 +148,11 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
                         >
                           <i className={`${child.icon} nav-icon`}></i>
                           <span className="nav-label">{t(child.labelKey)}</span>
+                          {child.badge && (
+                            <span className={`badge ms-auto ${child.badgeClass}`}>
+                              {child.badge}
+                            </span>
+                          )}
                         </NavLink>
                       ))}
                     </div>
@@ -223,9 +162,7 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
                 /* Single menu item */
                 <NavLink
                   to={item.route || '#'}
-                  className={({ isActive }) =>
-                    `nav-link ${isActive ? 'active' : ''}`
-                  }
+                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                   title={collapsed ? t(item.labelKey) : ''}
                   onClick={handleNavClick}
                 >

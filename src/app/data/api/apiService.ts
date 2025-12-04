@@ -63,6 +63,7 @@ class ApiService {
       timeout: APP_CONSTANTS.API.TIMEOUT,
       headers: {
         'Content-Type': 'application/json',
+        'x-api-key': 'reqres_30bb4b25423642c18ddde61de8cadc40',
       },
     })
 

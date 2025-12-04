@@ -1,151 +1,76 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+// =============================================================================
+// User List Component
+// =============================================================================
+// Presentation layer component that uses UserListViewModel for all business logic.
+// This component only handles UI rendering - no direct API calls.
+// Follows UDF pattern: dispatch Input actions, render from Output state.
+// =============================================================================
+
+import { Link } from 'react-router-dom'
 import { useI18n } from '@core/providers/I18nProvider'
+import { useUserListViewModel } from '../viewmodels/userListViewModel'
+import type { User } from '@/app/domain/entities/user.model'
 import './UserListComponent.scss'
-
-interface User {
-  id: number
-  email: string
-  first_name: string
-  last_name: string
-  avatar: string
-}
-
-// Mock data for fallback when API is unavailable
-const MOCK_USERS: User[] = [
-  { id: 1, email: 'george.bluth@reqres.in', first_name: 'George', last_name: 'Bluth', avatar: 'https://reqres.in/img/faces/1-image.jpg' },
-  { id: 2, email: 'janet.weaver@reqres.in', first_name: 'Janet', last_name: 'Weaver', avatar: 'https://reqres.in/img/faces/2-image.jpg' },
-  { id: 3, email: 'emma.wong@reqres.in', first_name: 'Emma', last_name: 'Wong', avatar: 'https://reqres.in/img/faces/3-image.jpg' },
-  { id: 4, email: 'eve.holt@reqres.in', first_name: 'Eve', last_name: 'Holt', avatar: 'https://reqres.in/img/faces/4-image.jpg' },
-  { id: 5, email: 'charles.morris@reqres.in', first_name: 'Charles', last_name: 'Morris', avatar: 'https://reqres.in/img/faces/5-image.jpg' },
-  { id: 6, email: 'tracey.ramos@reqres.in', first_name: 'Tracey', last_name: 'Ramos', avatar: 'https://reqres.in/img/faces/6-image.jpg' },
-  { id: 7, email: 'michael.lawson@reqres.in', first_name: 'Michael', last_name: 'Lawson', avatar: 'https://reqres.in/img/faces/7-image.jpg' },
-  { id: 8, email: 'lindsay.ferguson@reqres.in', first_name: 'Lindsay', last_name: 'Ferguson', avatar: 'https://reqres.in/img/faces/8-image.jpg' },
-  { id: 9, email: 'tobias.funke@reqres.in', first_name: 'Tobias', last_name: 'Funke', avatar: 'https://reqres.in/img/faces/9-image.jpg' },
-  { id: 10, email: 'byron.fields@reqres.in', first_name: 'Byron', last_name: 'Fields', avatar: 'https://reqres.in/img/faces/10-image.jpg' },
-  { id: 11, email: 'george.edwards@reqres.in', first_name: 'George', last_name: 'Edwards', avatar: 'https://reqres.in/img/faces/11-image.jpg' },
-  { id: 12, email: 'rachel.howell@reqres.in', first_name: 'Rachel', last_name: 'Howell', avatar: 'https://reqres.in/img/faces/12-image.jpg' },
-]
 
 export function UserListComponent() {
   const { t } = useI18n()
-  const navigate = useNavigate()
 
-  const [users, setUsers] = useState<User[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalItems, setTotalItems] = useState(0)
-  const pageSize = 6
+  // Use ViewModel - UDF Input/Output pattern
+  const { output, dispatch } = useUserListViewModel()
 
-  const fetchUsers = useCallback(async (page: number, showRefreshIndicator = false) => {
-    if (showRefreshIndicator) {
-      setIsRefreshing(true)
-    } else {
-      setIsLoading(true)
-    }
-    setError(null)
-
-    try {
-      const response = await fetch(`https://reqres.in/api/users?page=${page}&per_page=${pageSize}`)
-
-      if (!response.ok) {
-        throw new Error('API not available')
-      }
-
-      const data = await response.json()
-
-      // Check if we got valid data structure
-      if (data.data && Array.isArray(data.data)) {
-        setUsers(data.data)
-        setTotalPages(data.total_pages)
-        setTotalItems(data.total)
-        setCurrentPage(page)
-      } else {
-        throw new Error('Invalid response format')
-      }
-    } catch {
-      // Fallback to mock data when API fails
-      console.log('API unavailable, using mock data')
-      const start = (page - 1) * pageSize
-      const end = start + pageSize
-      const paginatedMockUsers = MOCK_USERS.slice(start, end)
-
-      setUsers(paginatedMockUsers)
-      setTotalPages(Math.ceil(MOCK_USERS.length / pageSize))
-      setTotalItems(MOCK_USERS.length)
-      setCurrentPage(page)
-    } finally {
-      setIsLoading(false)
-      setIsRefreshing(false)
-    }
-  }, [pageSize])
-
-  useEffect(() => {
-    fetchUsers(1)
-  }, [fetchUsers])
+  // ==========================================================================
+  // Event Handlers - dispatch Input actions
+  // ==========================================================================
 
   const handleRefresh = () => {
-    fetchUsers(currentPage, true)
+    dispatch({ type: 'REFRESH_USERS' })
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
+    dispatch({ type: 'SET_SEARCH_QUERY', query: e.target.value })
   }
 
-  const clearSearch = () => {
-    setSearchQuery('')
+  const handleClearSearch = () => {
+    dispatch({ type: 'CLEAR_SEARCH' })
   }
 
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      fetchUsers(page)
-    }
+    dispatch({ type: 'CHANGE_PAGE', page })
   }
 
   const handleViewUser = (user: User) => {
-    navigate(`/users/${user.id}`)
+    dispatch({ type: 'NAVIGATE_TO_DETAIL', id: user.id })
   }
 
   const handleEditUser = (user: User) => {
-    navigate(`/users/${user.id}/edit`)
+    dispatch({ type: 'NAVIGATE_TO_EDIT', id: user.id })
   }
 
   const handleDeleteUser = async (user: User) => {
-    if (window.confirm(t('user.delete.message', { name: `${user.first_name} ${user.last_name}` }))) {
-      try {
-        // Try API delete, but proceed anyway for mock data
-        await fetch(`https://reqres.in/api/users/${user.id}`, { method: 'DELETE' }).catch(() => {})
-        setSuccessMessage(t('user.deleted.success', { name: `${user.first_name} ${user.last_name}` }))
-        setUsers(prev => prev.filter(u => u.id !== user.id))
-        setTotalItems(prev => prev - 1)
-        setTimeout(() => setSuccessMessage(null), 5000)
-      } catch {
-        setError(t('error.unknown'))
-      }
+    if (window.confirm(t('user.delete.message', { name: `${user.firstName} ${user.lastName}` }))) {
+      dispatch({ type: 'DELETE_USER', user })
     }
   }
 
-  const filteredUsers = users.filter(user => {
-    if (!searchQuery) return true
-    const query = searchQuery.toLowerCase()
-    return (
-      user.first_name.toLowerCase().includes(query) ||
-      user.last_name.toLowerCase().includes(query) ||
-      user.email.toLowerCase().includes(query)
-    )
-  })
+  const handleDismissError = () => {
+    dispatch({ type: 'DISMISS_ERROR' })
+  }
+
+  const handleDismissSuccess = () => {
+    dispatch({ type: 'DISMISS_SUCCESS' })
+  }
+
+  // ==========================================================================
+  // Helper Functions
+  // ==========================================================================
 
   const getInitials = (firstName: string, lastName: string) => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
   }
 
-  const startItem = (currentPage - 1) * pageSize + 1
-  const endItem = Math.min(currentPage * pageSize, totalItems)
+  // ==========================================================================
+  // Render - driven by Output state
+  // ==========================================================================
 
   return (
     <div className="user-list-page container-fluid py-4">
@@ -162,19 +87,19 @@ export function UserListComponent() {
       </div>
 
       {/* Alerts */}
-      {successMessage && (
+      {output.successMessage && (
         <div className="alert alert-success alert-dismissible fade show" role="alert">
           <i className="bi bi-check-circle me-2"></i>
-          {successMessage}
-          <button type="button" className="btn-close" onClick={() => setSuccessMessage(null)}></button>
+          {output.successMessage}
+          <button type="button" className="btn-close" onClick={handleDismissSuccess}></button>
         </div>
       )}
 
-      {error && (
+      {output.error && (
         <div className="alert alert-danger alert-dismissible fade show" role="alert">
           <i className="bi bi-exclamation-triangle me-2"></i>
-          {error}
-          <button type="button" className="btn-close" onClick={() => setError(null)}></button>
+          {output.error}
+          <button type="button" className="btn-close" onClick={handleDismissError}></button>
         </div>
       )}
 
@@ -189,14 +114,14 @@ export function UserListComponent() {
                   type="text"
                   className="form-control search-input"
                   placeholder={t('user.list.search.placeholder')}
-                  value={searchQuery}
+                  value={output.searchQuery}
                   onChange={handleSearch}
                 />
-                {searchQuery && (
+                {output.searchQuery && (
                   <button
                     type="button"
                     className="btn btn-link clear-search"
-                    onClick={clearSearch}
+                    onClick={handleClearSearch}
                   >
                     <i className="bi bi-x-lg"></i>
                   </button>
@@ -207,9 +132,9 @@ export function UserListComponent() {
               <button
                 className="btn btn-outline-secondary"
                 onClick={handleRefresh}
-                disabled={isRefreshing}
+                disabled={output.isRefreshing}
               >
-                <i className={`bi bi-arrow-clockwise ${isRefreshing ? 'spin' : ''}`}></i>
+                <i className={`bi bi-arrow-clockwise ${output.isRefreshing ? 'spin' : ''}`}></i>
                 <span className="ms-2">{t('common.refresh')}</span>
               </button>
             </div>
@@ -218,7 +143,7 @@ export function UserListComponent() {
       </div>
 
       {/* Loading State */}
-      {isLoading && (
+      {output.isLoading && (
         <div className="text-center py-5">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">{t('common.loading')}</span>
@@ -228,15 +153,15 @@ export function UserListComponent() {
       )}
 
       {/* Empty State */}
-      {!isLoading && filteredUsers.length === 0 && (
+      {!output.isLoading && output.filteredUsers.length === 0 && (
         <div className="card">
           <div className="card-body text-center py-5">
             <i className="bi bi-people display-1 text-muted opacity-50"></i>
             <h4 className="mt-3 text-muted">{t('user.list.no.results')}</h4>
             <p className="text-muted">
-              {searchQuery ? t('user.list.empty.search') : t('user.list.empty.message')}
+              {output.searchQuery ? t('user.list.empty.search') : t('user.list.empty.message')}
             </p>
-            {!searchQuery && (
+            {!output.searchQuery && (
               <Link to="/users/new" className="btn btn-primary mt-3">
                 <i className="bi bi-plus-lg me-2"></i>
                 {t('user.list.create')}
@@ -247,7 +172,7 @@ export function UserListComponent() {
       )}
 
       {/* User Table - Desktop */}
-      {!isLoading && filteredUsers.length > 0 && (
+      {!output.isLoading && output.filteredUsers.length > 0 && (
         <>
           <div className="card d-none d-md-block">
             <div className="table-responsive">
@@ -262,7 +187,7 @@ export function UserListComponent() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map(user => (
+                  {output.filteredUsers.map(user => (
                     <tr
                       key={user.id}
                       className="user-row"
@@ -274,17 +199,17 @@ export function UserListComponent() {
                         {user.avatar ? (
                           <img
                             src={user.avatar}
-                            alt={`${user.first_name} ${user.last_name}`}
+                            alt={`${user.firstName} ${user.lastName}`}
                             className="user-avatar"
                           />
                         ) : (
                           <div className="user-avatar avatar-initials">
-                            {getInitials(user.first_name, user.last_name)}
+                            {getInitials(user.firstName, user.lastName)}
                           </div>
                         )}
                       </td>
                       <td>
-                        <strong>{user.first_name} {user.last_name}</strong>
+                        <strong>{user.firstName} {user.lastName}</strong>
                       </td>
                       <td>{user.email}</td>
                       <td className="text-end" onClick={(e) => e.stopPropagation()}>
@@ -321,7 +246,7 @@ export function UserListComponent() {
 
           {/* User Cards - Mobile */}
           <div className="d-md-none">
-            {filteredUsers.map(user => (
+            {output.filteredUsers.map(user => (
               <div
                 key={user.id}
                 className="card mb-3 user-card"
@@ -333,16 +258,16 @@ export function UserListComponent() {
                     {user.avatar ? (
                       <img
                         src={user.avatar}
-                        alt={`${user.first_name} ${user.last_name}`}
+                        alt={`${user.firstName} ${user.lastName}`}
                         className="user-avatar-lg"
                       />
                     ) : (
                       <div className="user-avatar-lg avatar-initials">
-                        {getInitials(user.first_name, user.last_name)}
+                        {getInitials(user.firstName, user.lastName)}
                       </div>
                     )}
                     <div className="flex-grow-1">
-                      <h6 className="mb-1">{user.first_name} {user.last_name}</h6>
+                      <h6 className="mb-1">{user.firstName} {user.lastName}</h6>
                       <small className="text-muted">{user.email}</small>
                     </div>
                   </div>
@@ -374,21 +299,21 @@ export function UserListComponent() {
           {/* Pagination */}
           <div className="d-flex justify-content-between align-items-center mt-4">
             <span className="text-muted">
-              {t('user.list.showing', { start: startItem, end: endItem, total: totalItems })}
+              {t('user.list.showing', { start: output.startItem, end: output.endItem, total: output.totalItems })}
             </span>
             <nav>
               <ul className="pagination mb-0">
-                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                <li className={`page-item ${output.currentPage === 1 ? 'disabled' : ''}`}>
                   <button
                     className="page-link"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(output.currentPage - 1)}
+                    disabled={output.currentPage === 1}
                   >
                     <i className="bi bi-chevron-left"></i>
                   </button>
                 </li>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                  <li key={page} className={`page-item ${page === currentPage ? 'active' : ''}`}>
+                {Array.from({ length: output.totalPages }, (_, i) => i + 1).map(page => (
+                  <li key={page} className={`page-item ${page === output.currentPage ? 'active' : ''}`}>
                     <button
                       className="page-link"
                       onClick={() => handlePageChange(page)}
@@ -397,11 +322,11 @@ export function UserListComponent() {
                     </button>
                   </li>
                 ))}
-                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                <li className={`page-item ${output.currentPage === output.totalPages ? 'disabled' : ''}`}>
                   <button
                     className="page-link"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(output.currentPage + 1)}
+                    disabled={output.currentPage === output.totalPages}
                   >
                     <i className="bi bi-chevron-right"></i>
                   </button>
