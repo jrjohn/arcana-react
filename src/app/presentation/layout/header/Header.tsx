@@ -146,7 +146,7 @@ export function Header({ onToggleSidebar, onToggleRightPanel }: HeaderProps) {
           {/* Right Panel Toggle */}
           <button
             type="button"
-            className="btn btn-link header-action d-none d-lg-inline-block"
+            className="btn btn-link header-action"
             onClick={onToggleRightPanel}
             aria-label="Toggle right panel"
           >

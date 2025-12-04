@@ -26,11 +26,62 @@
     width: $sidebar-collapsed-width;
 
     .user-profile-block {
-      padding: 1rem 0.5rem;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+    }
+
+    .user-profile-content {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      margin-bottom: 0;
     }
 
     .user-avatar-wrapper {
-      margin: 0 auto;
+      margin: 0 auto 0.25rem;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      bottom: 0;
+      right: 0;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.125rem;
+    }
+
+    .user-name {
+      font-size: 0.625rem;
+      max-width: 55px;
+      line-height: 1.2;
+    }
+
+    .user-email {
+      display: none;
+    }
+
+    .user-role-badge {
+      font-size: 0.5rem;
+      padding: 0.125rem 0.25rem;
+      margin-top: 0.125rem;
+    }
+
+    .user-profile-actions {
+      display: none;
+    }
+
+    .nav-section-title {
+      display: none;
     }
 
     .nav-link {
@@ -40,9 +91,20 @@
 
     .nav-icon {
       margin-right: 0;
+      font-size: 1.25rem;
     }
 
-    .nav-arrow {
+    .nav-label,
+    .nav-arrow,
+    .badge:not(.badge-dot) {
+      display: none;
+    }
+
+    .nav-submenu {
+      display: none;
+    }
+
+    .sidebar-footer {
       display: none;
     }
   }
@@ -66,15 +128,10 @@
 
 .user-profile-content {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-bottom: 1rem;
-
-  .collapsed & {
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 0;
-  }
 }
 
 .user-avatar-wrapper {
@@ -126,8 +183,12 @@
 }
 
 .user-info {
-  flex: 1;
+  text-align: center;
   min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .user-name {
@@ -149,10 +210,10 @@
 .user-role-badge {
   font-size: 0.625rem;
   padding: 0.25rem 0.5rem;
-  margin-top: 0.25rem;
   display: inline-block;
   background-color: $badge-on-purple !important;
   border: 1px solid $border-on-purple;
+  margin-top: 0.125rem;
 }
 
 .user-profile-actions {

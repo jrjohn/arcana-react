@@ -11,6 +11,22 @@ interface User {
   avatar: string
 }
 
+// Mock data for fallback when API is unavailable
+const MOCK_USERS: User[] = [
+  { id: 1, email: 'george.bluth@reqres.in', first_name: 'George', last_name: 'Bluth', avatar: 'https://reqres.in/img/faces/1-image.jpg' },
+  { id: 2, email: 'janet.weaver@reqres.in', first_name: 'Janet', last_name: 'Weaver', avatar: 'https://reqres.in/img/faces/2-image.jpg' },
+  { id: 3, email: 'emma.wong@reqres.in', first_name: 'Emma', last_name: 'Wong', avatar: 'https://reqres.in/img/faces/3-image.jpg' },
+  { id: 4, email: 'eve.holt@reqres.in', first_name: 'Eve', last_name: 'Holt', avatar: 'https://reqres.in/img/faces/4-image.jpg' },
+  { id: 5, email: 'charles.morris@reqres.in', first_name: 'Charles', last_name: 'Morris', avatar: 'https://reqres.in/img/faces/5-image.jpg' },
+  { id: 6, email: 'tracey.ramos@reqres.in', first_name: 'Tracey', last_name: 'Ramos', avatar: 'https://reqres.in/img/faces/6-image.jpg' },
+  { id: 7, email: 'michael.lawson@reqres.in', first_name: 'Michael', last_name: 'Lawson', avatar: 'https://reqres.in/img/faces/7-image.jpg' },
+  { id: 8, email: 'lindsay.ferguson@reqres.in', first_name: 'Lindsay', last_name: 'Ferguson', avatar: 'https://reqres.in/img/faces/8-image.jpg' },
+  { id: 9, email: 'tobias.funke@reqres.in', first_name: 'Tobias', last_name: 'Funke', avatar: 'https://reqres.in/img/faces/9-image.jpg' },
+  { id: 10, email: 'byron.fields@reqres.in', first_name: 'Byron', last_name: 'Fields', avatar: 'https://reqres.in/img/faces/10-image.jpg' },
+  { id: 11, email: 'george.edwards@reqres.in', first_name: 'George', last_name: 'Edwards', avatar: 'https://reqres.in/img/faces/11-image.jpg' },
+  { id: 12, email: 'rachel.howell@reqres.in', first_name: 'Rachel', last_name: 'Howell', avatar: 'https://reqres.in/img/faces/12-image.jpg' },
+]
+
 export function UserListComponent() {
   const { t } = useI18n()
   const navigate = useNavigate()
@@ -36,19 +52,38 @@ export function UserListComponent() {
 
     try {
       const response = await fetch(`https://reqres.in/api/users?page=${page}&per_page=${pageSize}`)
+
+      if (!response.ok) {
+        throw new Error('API not available')
+      }
+
       const data = await response.json()
 
-      setUsers(data.data)
-      setTotalPages(data.total_pages)
-      setTotalItems(data.total)
+      // Check if we got valid data structure
+      if (data.data && Array.isArray(data.data)) {
+        setUsers(data.data)
+        setTotalPages(data.total_pages)
+        setTotalItems(data.total)
+        setCurrentPage(page)
+      } else {
+        throw new Error('Invalid response format')
+      }
+    } catch {
+      // Fallback to mock data when API fails
+      console.log('API unavailable, using mock data')
+      const start = (page - 1) * pageSize
+      const end = start + pageSize
+      const paginatedMockUsers = MOCK_USERS.slice(start, end)
+
+      setUsers(paginatedMockUsers)
+      setTotalPages(Math.ceil(MOCK_USERS.length / pageSize))
+      setTotalItems(MOCK_USERS.length)
       setCurrentPage(page)
-    } catch (err) {
-      setError(t('error.network'))
     } finally {
       setIsLoading(false)
       setIsRefreshing(false)
     }
-  }, [t, pageSize])
+  }, [pageSize])
 
   useEffect(() => {
     fetchUsers(1)
@@ -83,11 +118,13 @@ export function UserListComponent() {
   const handleDeleteUser = async (user: User) => {
     if (window.confirm(t('user.delete.message', { name: `${user.first_name} ${user.last_name}` }))) {
       try {
-        await fetch(`https://reqres.in/api/users/${user.id}`, { method: 'DELETE' })
+        // Try API delete, but proceed anyway for mock data
+        await fetch(`https://reqres.in/api/users/${user.id}`, { method: 'DELETE' }).catch(() => {})
         setSuccessMessage(t('user.deleted.success', { name: `${user.first_name} ${user.last_name}` }))
         setUsers(prev => prev.filter(u => u.id !== user.id))
+        setTotalItems(prev => prev - 1)
         setTimeout(() => setSuccessMessage(null), 5000)
-      } catch (err) {
+      } catch {
         setError(t('error.unknown'))
       }
     }
@@ -226,7 +263,12 @@ export function UserListComponent() {
                 </thead>
                 <tbody>
                   {filteredUsers.map(user => (
-                    <tr key={user.id}>
+                    <tr
+                      key={user.id}
+                      className="user-row"
+                      onClick={() => handleViewUser(user)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <td>#{user.id}</td>
                       <td>
                         {user.avatar ? (
@@ -245,7 +287,7 @@ export function UserListComponent() {
                         <strong>{user.first_name} {user.last_name}</strong>
                       </td>
                       <td>{user.email}</td>
-                      <td className="text-end">
+                      <td className="text-end" onClick={(e) => e.stopPropagation()}>
                         <div className="btn-group btn-group-sm">
                           <button
                             className="btn btn-outline-primary"
@@ -280,7 +322,12 @@ export function UserListComponent() {
           {/* User Cards - Mobile */}
           <div className="d-md-none">
             {filteredUsers.map(user => (
-              <div key={user.id} className="card mb-3 user-card">
+              <div
+                key={user.id}
+                className="card mb-3 user-card"
+                onClick={() => handleViewUser(user)}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className="card-body">
                   <div className="d-flex align-items-center gap-3">
                     {user.avatar ? (
@@ -299,7 +346,7 @@ export function UserListComponent() {
                       <small className="text-muted">{user.email}</small>
                     </div>
                   </div>
-                  <div className="mt-3 d-flex gap-2">
+                  <div className="mt-3 d-flex gap-2" onClick={(e) => e.stopPropagation()}>
                     <button
                       className="btn btn-outline-primary btn-sm flex-fill"
                       onClick={() => handleViewUser(user)}

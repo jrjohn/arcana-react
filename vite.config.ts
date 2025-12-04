@@ -6,15 +6,15 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@core': path.resolve(__dirname, './src/app/core'),
-      '@domain': path.resolve(__dirname, './src/app/domain'),
-      '@data': path.resolve(__dirname, './src/app/data'),
-      '@presentation': path.resolve(__dirname, './src/app/presentation'),
-      '@shared': path.resolve(__dirname, './src/app/presentation/shared'),
-      '@assets': path.resolve(__dirname, './src/assets'),
-    },
+    alias: [
+      { find: '@', replacement: path.resolve(__dirname, './src') },
+      { find: '@core', replacement: path.resolve(__dirname, './src/app/core') },
+      { find: '@domain', replacement: path.resolve(__dirname, './src/app/domain') },
+      { find: '@data', replacement: path.resolve(__dirname, './src/app/data') },
+      { find: '@presentation', replacement: path.resolve(__dirname, './src/app/presentation') },
+      { find: '@shared', replacement: path.resolve(__dirname, './src/app/presentation/shared') },
+      { find: '@assets', replacement: path.resolve(__dirname, './src/assets') },
+    ],
   },
   css: {
     preprocessorOptions: {

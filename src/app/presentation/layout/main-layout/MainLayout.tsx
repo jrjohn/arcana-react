@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Header } from '../header/Header'
 import { Sidebar } from '../sidebar/Sidebar'
@@ -18,7 +18,7 @@ export function MainLayout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   const toggleSidebar = useCallback(() => {
-    // On mobile, toggle mobile sidebar
+    // On mobile, toggle mobile sidebar overlay
     if (window.innerWidth <= 768) {
       setMobileSidebarOpen(prev => !prev)
     } else {
@@ -30,6 +30,17 @@ export function MainLayout() {
       })
     }
   }, [])
+
+  // Listen for window resize to handle responsive behavior
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && mobileSidebarOpen) {
+        setMobileSidebarOpen(false)
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [mobileSidebarOpen])
 
   const toggleRightPanel = useCallback(() => {
     setRightPanelOpen(prev => {

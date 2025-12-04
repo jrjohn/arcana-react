@@ -158,7 +158,7 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
             <div className="user-info">
               <div className="user-name">{userName}</div>
               <div className="user-email">{currentUser?.email}</div>
-              <span className="badge bg-primary user-role-badge">{currentUser?.role}</span>
+              <div><span className="badge bg-primary user-role-badge">{currentUser?.role}</span></div>
             </div>
           )}
         </div>
