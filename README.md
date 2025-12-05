@@ -2,6 +2,7 @@
 
 > Enterprise-grade React reference architecture implementing Clean Architecture, Offline-First design, and MVVM Input/Output/Effect pattern.
 
+[![Architecture Rating](https://img.shields.io/badge/Architecture%20Rating-⭐⭐⭐⭐⭐%208.4%2F10-gold.svg)](#architecture-evaluation)
 [![React](https://img.shields.io/badge/React-19.1-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?logo=vite)](https://vitejs.dev/)
