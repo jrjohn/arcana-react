@@ -7,6 +7,7 @@ import { Subject } from 'rxjs'
 import { APP_CONSTANTS } from '@/app/core/constants/app.constants'
 import { AppError, ErrorCategory } from '@/app/domain/entities/app-error.model'
 import { networkStatusService } from '@/app/domain/services/networkStatusService'
+import { csrfInterceptor, clearCsrfToken } from './interceptors/csrfInterceptor'
 
 /**
  * API Response wrapper
@@ -78,6 +79,9 @@ class ApiService {
     this.client.interceptors.request.use(authInterceptor)
     this.client.interceptors.request.use(requestIdInterceptor)
 
+    // CSRF protection for state-changing requests
+    this.client.interceptors.request.use(csrfInterceptor)
+
     // Check network before request
     this.client.interceptors.request.use((config) => {
       if (!networkStatusService.isCurrentlyOnline()) {
@@ -136,6 +140,9 @@ class ApiService {
   private handleUnauthorized(): void {
     localStorage.removeItem(APP_CONSTANTS.STORAGE_KEYS.AUTH_TOKEN)
     localStorage.removeItem(APP_CONSTANTS.STORAGE_KEYS.USER)
+
+    // Clear CSRF token on logout
+    clearCsrfToken()
 
     // Dispatch custom event for auth provider to handle
     window.dispatchEvent(new CustomEvent('auth:unauthorized'))

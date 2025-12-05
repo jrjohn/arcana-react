@@ -9,6 +9,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import { MainLayout } from '@presentation/layout/main-layout/MainLayout'
 import { LoadingSpinner } from '@shared/components/LoadingSpinner/LoadingSpinner'
+import { ErrorBoundary } from '@shared/components/ErrorBoundary/ErrorBoundary'
 import { Routes as AppRoutes } from '@core/navigation'
 
 // =============================================================================
@@ -35,12 +36,14 @@ const UserFormComponent = lazy(() =>
 )
 
 // =============================================================================
-// Loading Wrapper
+// Loading Wrapper with Error Boundary
 // =============================================================================
 
 function LazyWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense fallback={<LoadingSpinner fullPage message="Loading..." />}>{children}</Suspense>
+    <ErrorBoundary level="feature">
+      <Suspense fallback={<LoadingSpinner fullPage message="Loading..." />}>{children}</Suspense>
+    </ErrorBoundary>
   )
 }
 
