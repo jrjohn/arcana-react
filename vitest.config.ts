@@ -12,14 +12,18 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html', 'lcov'],
+      include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'node_modules/',
         'src/test/',
+        'src/**/*.test.{ts,tsx}',
+        'src/**/*.spec.{ts,tsx}',
         '**/*.d.ts',
         'src/main.tsx',
         'src/vite-env.d.ts',
       ],
+      all: true,
     },
   },
   resolve: {
