@@ -9,12 +9,11 @@ import { Header } from './Header'
 // Test wrapper with all providers
 function renderWithProviders(
   _ui: React.ReactElement,
-  options: { onToggleSidebar?: () => void; onToggleRightPanel?: () => void; rightPanelOpen?: boolean } = {}
+  options: { onToggleSidebar?: () => void; onToggleRightPanel?: () => void } = {}
 ) {
   const {
     onToggleSidebar = vi.fn(),
     onToggleRightPanel = vi.fn(),
-    rightPanelOpen = false,
   } = options
 
   return {
@@ -25,7 +24,6 @@ function renderWithProviders(
             <Header
               onToggleSidebar={onToggleSidebar}
               onToggleRightPanel={onToggleRightPanel}
-              rightPanelOpen={rightPanelOpen}
             />
           </AuthProvider>
         </I18nProvider>
@@ -44,13 +42,13 @@ describe('Header', () => {
   })
 
   it('should render header with brand name', () => {
-    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     expect(screen.getByText('Arcana')).toBeInTheDocument()
   })
 
   it('should render search input', () => {
-    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     expect(screen.getByPlaceholderText(/search/i)).toBeInTheDocument()
   })
@@ -58,7 +56,7 @@ describe('Header', () => {
   it('should call onToggleSidebar when sidebar toggle is clicked', async () => {
     const user = userEvent.setup()
     const { onToggleSidebar } = renderWithProviders(
-      <Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />
+      <Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />
     )
 
     const toggleButton = screen.getByLabelText('Toggle sidebar')
@@ -72,7 +70,7 @@ describe('Header', () => {
   it('should call onToggleRightPanel when right panel toggle is clicked', async () => {
     const user = userEvent.setup()
     const { onToggleRightPanel } = renderWithProviders(
-      <Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />
+      <Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />
     )
 
     const toggleButton = screen.getByLabelText('Toggle right panel')
@@ -84,7 +82,7 @@ describe('Header', () => {
   })
 
   it('should display current language', () => {
-    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     // Default language is English - use getAllByText since it appears multiple times
     const englishElements = screen.getAllByText('English')
@@ -93,7 +91,7 @@ describe('Header', () => {
 
   it('should open language dropdown when clicked', async () => {
     const user = userEvent.setup()
-    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     const languageButton = screen.getByLabelText('Select language')
     await act(async () => {
@@ -105,7 +103,7 @@ describe('Header', () => {
 
   it('should change language when selecting from dropdown', async () => {
     const user = userEvent.setup()
-    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     const languageButton = screen.getByLabelText('Select language')
     await act(async () => {
@@ -124,7 +122,7 @@ describe('Header', () => {
   })
 
   it('should display user name from auth context', () => {
-    const { container } = renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    const { container } = renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     // Default demo user is "John Doe" - check for user avatar or name element
     const userMenuToggle = container.querySelector('.user-menu-toggle')
@@ -133,7 +131,7 @@ describe('Header', () => {
 
   it('should open user dropdown when clicked', async () => {
     const user = userEvent.setup()
-    const { container } = renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    const { container } = renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     const userMenuButton = container.querySelector('.user-menu-toggle')
     if (userMenuButton) {
@@ -153,7 +151,7 @@ describe('Header', () => {
       <BrowserRouter>
         <I18nProvider>
           <AuthProvider>
-            <Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />
+            <Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />
           </AuthProvider>
         </I18nProvider>
       </BrowserRouter>
@@ -177,13 +175,13 @@ describe('Header', () => {
   })
 
   it('should display notification badge', () => {
-    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     expect(screen.getByText('3')).toBeInTheDocument()
   })
 
   it('should have brand link to home', () => {
-    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} rightPanelOpen={false} />)
+    renderWithProviders(<Header onToggleSidebar={vi.fn()} onToggleRightPanel={vi.fn()} />)
 
     const brandLink = screen.getByText('Arcana').closest('a')
     expect(brandLink).toHaveAttribute('href', '/')
