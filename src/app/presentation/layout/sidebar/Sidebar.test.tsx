@@ -186,7 +186,7 @@ describe('Sidebar', () => {
 
   it('calls onCloseMobile when a nav link is clicked on mobile', async () => {
     // Simulate mobile by setting window.innerWidth
-    Object.defineProperty(window, 'innerWidth', { value: 500, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 500, writable: true })
     const user = userEvent.setup()
     const { onCloseMobile } = renderWithProviders({ mobileOpen: true })
 
@@ -200,7 +200,7 @@ describe('Sidebar', () => {
     }
 
     // Restore
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
   })
 
   // --- Avatar ---

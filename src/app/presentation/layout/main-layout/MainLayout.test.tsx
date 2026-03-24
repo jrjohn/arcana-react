@@ -124,7 +124,7 @@ describe('MainLayout', () => {
 
   it('toggles sidebar collapsed state on desktop', async () => {
     // Simulate desktop
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
     const user = userEvent.setup()
     renderWithProviders()
 
@@ -138,7 +138,7 @@ describe('MainLayout', () => {
   })
 
   it('toggles sidebar back to expanded on second click', async () => {
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
     const user = userEvent.setup()
     renderWithProviders()
 
@@ -156,7 +156,7 @@ describe('MainLayout', () => {
   // --- Sidebar toggle (mobile) ---
 
   it('toggles mobile sidebar on mobile viewport', async () => {
-    Object.defineProperty(window, 'innerWidth', { value: 500, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 500, writable: true })
     const user = userEvent.setup()
     renderWithProviders()
 
@@ -168,11 +168,11 @@ describe('MainLayout', () => {
     expect(screen.getByTestId('sidebar')).toHaveAttribute('data-mobile-open', 'true')
 
     // Restore
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
   })
 
   it('shows mobile overlay when mobile sidebar is open', async () => {
-    Object.defineProperty(window, 'innerWidth', { value: 500, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 500, writable: true })
     const user = userEvent.setup()
     const { container } = renderWithProviders()
 
@@ -183,11 +183,11 @@ describe('MainLayout', () => {
 
     expect(container.querySelector('.mobile-overlay')).toBeInTheDocument()
 
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
   })
 
   it('closes mobile sidebar when overlay is clicked', async () => {
-    Object.defineProperty(window, 'innerWidth', { value: 500, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 500, writable: true })
     const user = userEvent.setup()
     const { container } = renderWithProviders()
 
@@ -205,7 +205,7 @@ describe('MainLayout', () => {
 
     expect(screen.getByTestId('sidebar')).toHaveAttribute('data-mobile-open', 'false')
 
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
   })
 
   // --- Right panel toggle ---
@@ -245,7 +245,7 @@ describe('MainLayout', () => {
   // --- CSS class propagation ---
 
   it('adds sidebar-collapsed class to main content when sidebar is collapsed', async () => {
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+    Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
     const user = userEvent.setup()
     const { container } = renderWithProviders()
 
