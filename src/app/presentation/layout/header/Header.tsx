@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@core/providers/AuthProvider'
-import { useI18n, type Language, type LanguageConfig } from '@core/providers/I18nProvider'
+import { useI18n, type LanguageConfig } from '@core/providers/I18nProvider'
 import './Header.scss'
 
 interface HeaderProps {
