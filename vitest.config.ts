@@ -24,6 +24,7 @@ export default defineConfig({
         'src/vite-env.d.ts',
       ],
       all: true,
+      reportsDirectory: './coverage',
     },
   },
   resolve: {
