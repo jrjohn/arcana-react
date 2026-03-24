@@ -254,14 +254,14 @@ export function UserListComponent() {
               <div
                 key={user.id}
                 className="card mb-3 user-card"
-                role="button"
-                tabIndex={0}
-                onClick={() => handleViewUser(user)}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewUser(user) } }}
-                style={{ cursor: 'pointer' }}
               >
                 <div className="card-body">
-                  <div className="d-flex align-items-center gap-3">
+                  <button
+                    type="button"
+                    className="user-card-btn d-flex align-items-center gap-3 w-100 border-0 bg-transparent p-0 text-start"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleViewUser(user)}
+                  >
                     {user.avatar ? (
                       <img
                         src={user.avatar}
@@ -277,8 +277,8 @@ export function UserListComponent() {
                       <h6 className="mb-1">{user.firstName} {user.lastName}</h6>
                       <small className="text-muted">{user.email}</small>
                     </div>
-                  </div>
-                  <div className="mt-3 d-flex gap-2" role="toolbar" aria-label={t('table.actions')} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                  </button>
+                  <div className="mt-3 d-flex gap-2" role="toolbar" aria-label={t('table.actions')}>
                     <button
                       className="btn btn-outline-primary btn-sm flex-fill"
                       onClick={() => handleViewUser(user)}
