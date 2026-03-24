@@ -338,7 +338,7 @@ export function useUserListViewModel(): UseUserListViewModel {
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false
-      dispatch({ type: 'LOAD_USERS', page: 1 })
+      void dispatch({ type: 'LOAD_USERS', page: 1 })
       internalDispatch({ type: 'SET_ONLINE', payload: userService.isOnline() })
     }
   }, [dispatch, userService])

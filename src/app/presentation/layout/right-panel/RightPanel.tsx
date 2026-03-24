@@ -238,7 +238,10 @@ export function RightPanel({ isOpen, onClose }: RightPanelProps) {
                   <div
                     key={notification.id}
                     className={`notification-item ${!notification.read ? 'unread' : ''}`}
+                    role="button"
+                    tabIndex={0}
                     onClick={() => markAsRead(notification)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); markAsRead(notification) } }}
                   >
                     <div className="notification-avatar">
                       {notification.avatar ? (

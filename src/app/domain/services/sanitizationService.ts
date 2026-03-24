@@ -65,7 +65,8 @@ export const sanitizationService = {
   removeDangerousChars(input: string): string {
     if (!input) return ''
     // Remove null bytes, control characters, and common injection characters
-    return input.replace(/[\x00-\x1f\x7f<>'"`;\\]/g, '')
+    // eslint-disable-next-line no-control-regex
+    return input.replace(/[\u0000-\u001F\u007F<>'"`;\\]/g, '')
   },
 
   /**

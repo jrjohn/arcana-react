@@ -21,10 +21,10 @@ interface CacheEntry<T> {
  * - Suitable for frequently accessed data within a session
  */
 class MemoryCacheService {
-  private cache = new Map<string, CacheEntry<unknown>>()
-  private maxSize: number
-  private hits = signal(0)
-  private misses = signal(0)
+  private readonly cache = new Map<string, CacheEntry<unknown>>()
+  private readonly maxSize: number
+  private readonly hits = signal(0)
+  private readonly misses = signal(0)
 
   constructor(maxSize: number = 100) {
     this.maxSize = maxSize

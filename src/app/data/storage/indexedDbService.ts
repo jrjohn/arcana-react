@@ -74,13 +74,12 @@ class ArcanaDB extends Dexie {
  * - Manages pending offline operations
  */
 class IndexedDbService {
-  private db: ArcanaDB
-  private initialized = signal(false)
+  private readonly db: ArcanaDB
+  private readonly initialized = signal(false)
   private initPromise: Promise<void> | null = null
 
   constructor() {
     this.db = new ArcanaDB()
-    this.init()
   }
 
   /**

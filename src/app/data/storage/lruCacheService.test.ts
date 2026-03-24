@@ -292,18 +292,18 @@ describe('LRUCacheService', () => {
     it('updates value and moves to front', () => {
       const smallCache = new LRUCacheService(3, 300000)
 
-      smallCache.set('key1', 'value1')
-      smallCache.set('key2', 'value2')
-      smallCache.set('key3', 'value3')
+      smallCache.set('keyA', 'value1')
+      smallCache.set('keyB', 'value2')
+      smallCache.set('keyC', 'value3')
 
-      // Update key1 - should move to front
-      smallCache.set('key1', 'updated')
+      // Update keyA - should move to front
+      smallCache.set('keyA', 'updated')
 
-      // Add new item - key2 should be evicted
-      smallCache.set('key4', 'value4')
+      // Add new item - keyB should be evicted
+      smallCache.set('keyD', 'value4')
 
-      expect(smallCache.get('key1')).toBe('updated')
-      expect(smallCache.get('key2')).toBeNull() // evicted
+      expect(smallCache.get('keyA')).toBe('updated')
+      expect(smallCache.get('keyB')).toBeNull() // evicted
     })
   })
 })

@@ -355,7 +355,7 @@ export function useUserFormViewModel(userId?: string): UseUserFormViewModel {
   useEffect(() => {
     if (isInitialMount.current && userId) {
       isInitialMount.current = false
-      dispatch({ type: 'LOAD_USER', id: userId })
+      void dispatch({ type: 'LOAD_USER', id: userId })
     }
   }, [userId, dispatch, userService])
 

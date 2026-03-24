@@ -55,8 +55,8 @@ const requestIdInterceptor = (config: InternalAxiosRequestConfig): InternalAxios
  * Centralized HTTP client with interceptors and error handling
  */
 class ApiService {
-  private client: AxiosInstance
-  private errorSubject = new Subject<ApiErrorEvent>()
+  private readonly client: AxiosInstance
+  private readonly errorSubject = new Subject<ApiErrorEvent>()
 
   constructor() {
     this.client = axios.create({

@@ -47,17 +47,17 @@ export interface SyncStats {
  */
 class OfflineSyncService {
   // Reactive state
-  private status = signal<SyncStatus>(SyncStatus.IDLE)
-  private pendingCount = signal(0)
-  private syncedCount = signal(0)
-  private failedCount = signal(0)
-  private lastSyncTime = signal<Date | null>(null)
+  private readonly status = signal<SyncStatus>(SyncStatus.IDLE)
+  private readonly pendingCount = signal(0)
+  private readonly syncedCount = signal(0)
+  private readonly failedCount = signal(0)
+  private readonly lastSyncTime = signal<Date | null>(null)
 
   // Event subject
-  private syncEvents = new Subject<SyncEvent>()
+  private readonly syncEvents = new Subject<SyncEvent>()
 
   // Sync handlers by entity type
-  private handlers = new Map<
+  private readonly handlers = new Map<
     string,
     {
       create: (op: PendingOperation) => Promise<void>
@@ -86,7 +86,7 @@ class OfflineSyncService {
     const networkSub = networkStatusService.onChange$.subscribe((info: NetworkInfo) => {
       if (info.isOnline) {
         console.log('[Sync] Network online - starting sync')
-        this.sync()
+        void this.sync()
       }
     })
     this.subscriptions.push(networkSub)
@@ -96,12 +96,12 @@ class OfflineSyncService {
       .pipe(filter(() => networkStatusService.isCurrentlyOnline() && this.hasPending.value))
       .subscribe(() => {
         console.log('[Sync] Periodic sync check')
-        this.sync()
+        void this.sync()
       })
     this.subscriptions.push(periodicSub)
 
     // Update pending count on init
-    this.updatePendingCount()
+    void this.updatePendingCount()
   }
 
   /**

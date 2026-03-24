@@ -231,7 +231,7 @@ export function useUserDetailViewModel(userId: string): UseUserDetailViewModel {
   useEffect(() => {
     if (isInitialMount.current && userId) {
       isInitialMount.current = false
-      dispatch({ type: 'LOAD_USER', id: userId })
+      void dispatch({ type: 'LOAD_USER', id: userId })
     }
   }, [userId, dispatch, userService])
 

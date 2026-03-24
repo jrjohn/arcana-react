@@ -51,8 +51,8 @@ class UserRepository {
   })
 
   // Users cache for reactive updates
-  private usersSubject = new BehaviorSubject<User[]>([])
-  private userUpdates = new Subject<{ type: 'create' | 'update' | 'delete'; user: User }>()
+  private readonly usersSubject = new BehaviorSubject<User[]>([])
+  private readonly userUpdates = new Subject<{ type: 'create' | 'update' | 'delete'; user: User }>()
 
   // Computed values
   readonly loading = computed(() => this.state.value.loading)
@@ -63,7 +63,7 @@ class UserRepository {
     // Subscribe to network changes to sync when coming online
     networkStatusService.onChange$.subscribe((info: NetworkInfo) => {
       if (info.isOnline) {
-        this.syncPendingOperations()
+        void this.syncPendingOperations()
       }
     })
   }

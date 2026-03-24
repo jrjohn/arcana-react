@@ -186,10 +186,11 @@ describe('MemoryCacheService', () => {
 
   describe('edge cases', () => {
     it('overwrites existing key', () => {
-      cacheService.set('key', 'value1')
-      cacheService.set('key', 'value2')
+      const overwriteCache = new MemoryCacheService(100)
+      overwriteCache.set('overwrite-key', 'value1')
+      overwriteCache.set('overwrite-key', 'value2')
 
-      expect(cacheService.get('key')).toBe('value2')
+      expect(overwriteCache.get('overwrite-key')).toBe('value2')
     })
 
     it('handles empty string key', () => {

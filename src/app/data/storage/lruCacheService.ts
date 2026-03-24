@@ -18,7 +18,7 @@ interface LRUCacheEntry<T> {
  * LRU Node for doubly linked list
  */
 class LRUNode<T> {
-  key: string
+  readonly key: string
   entry: LRUCacheEntry<T>
   prev: LRUNode<T> | null = null
   next: LRUNode<T> | null = null
@@ -37,15 +37,15 @@ class LRUNode<T> {
  * - Configurable max size and default TTL
  */
 class LRUCacheService {
-  private cache = new Map<string, LRUNode<unknown>>()
+  private readonly cache = new Map<string, LRUNode<unknown>>()
   private head: LRUNode<unknown> | null = null
   private tail: LRUNode<unknown> | null = null
-  private maxSize: number
-  private defaultTTL: number
+  private readonly maxSize: number
+  private readonly defaultTTL: number
 
-  private hits = signal(0)
-  private misses = signal(0)
-  private evictions = signal(0)
+  private readonly hits = signal(0)
+  private readonly misses = signal(0)
+  private readonly evictions = signal(0)
 
   constructor(maxSize: number = 500, defaultTTL: number = APP_CONSTANTS.CACHE.DEFAULT_TTL) {
     this.maxSize = maxSize

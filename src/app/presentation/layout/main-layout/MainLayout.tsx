@@ -58,7 +58,14 @@ export function MainLayout() {
     <div className="main-layout">
       {/* Mobile Overlay */}
       {mobileSidebarOpen && (
-        <div className="mobile-overlay" onClick={closeMobileSidebar} />
+        <div
+          className="mobile-overlay"
+          role="button"
+          tabIndex={0}
+          onClick={closeMobileSidebar}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeMobileSidebar() } }}
+          aria-label="Close sidebar"
+        />
       )}
 
       {/* Header */}

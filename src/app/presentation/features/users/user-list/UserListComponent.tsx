@@ -191,7 +191,10 @@ export function UserListComponent() {
                     <tr
                       key={user.id}
                       className="user-row"
+                      role="button"
+                      tabIndex={0}
                       onClick={() => handleViewUser(user)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewUser(user) } }}
                       style={{ cursor: 'pointer' }}
                     >
                       <td>#{user.id}</td>
@@ -212,7 +215,7 @@ export function UserListComponent() {
                         <strong>{user.firstName} {user.lastName}</strong>
                       </td>
                       <td>{user.email}</td>
-                      <td className="text-end" onClick={(e) => e.stopPropagation()}>
+                      <td className="text-end" role="presentation" onClick={(e) => e.stopPropagation()}>
                         <div className="btn-group btn-group-sm">
                           <button
                             className="btn btn-outline-primary"
@@ -250,7 +253,10 @@ export function UserListComponent() {
               <div
                 key={user.id}
                 className="card mb-3 user-card"
+                role="button"
+                tabIndex={0}
                 onClick={() => handleViewUser(user)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewUser(user) } }}
                 style={{ cursor: 'pointer' }}
               >
                 <div className="card-body">
@@ -271,7 +277,7 @@ export function UserListComponent() {
                       <small className="text-muted">{user.email}</small>
                     </div>
                   </div>
-                  <div className="mt-3 d-flex gap-2" onClick={(e) => e.stopPropagation()}>
+                  <div className="mt-3 d-flex gap-2" role="presentation" onClick={(e) => e.stopPropagation()}>
                     <button
                       className="btn btn-outline-primary btn-sm flex-fill"
                       onClick={() => handleViewUser(user)}
