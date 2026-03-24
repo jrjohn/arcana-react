@@ -194,7 +194,7 @@ function computeHasErrors(errors: UserValidationErrors): boolean {
 
 export interface UseUserFormViewModel {
   output: UserFormOutput
-  dispatch: (input: UserFormInput) => void
+  dispatch: (input: UserFormInput) => Promise<void>
 }
 
 export function useUserFormViewModel(userId?: string): UseUserFormViewModel {

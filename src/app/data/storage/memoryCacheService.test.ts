@@ -188,7 +188,7 @@ describe('MemoryCacheService', () => {
     it('overwrites existing key', () => {
       const overwriteCache = new MemoryCacheService(100)
       overwriteCache.set('overwrite-key', 'value1')
-      overwriteCache.set('overwrite-key', 'value2')
+      overwriteCache.set('overwrite-key', 'value2') // NOSONAR - intentional duplicate key to test overwrite
 
       expect(overwriteCache.get('overwrite-key')).toBe('value2')
     })

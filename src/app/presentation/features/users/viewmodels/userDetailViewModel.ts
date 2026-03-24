@@ -133,7 +133,7 @@ function computeInitials(user: User | null): string {
 
 export interface UseUserDetailViewModel {
   output: UserDetailOutput
-  dispatch: (input: UserDetailInput) => void
+  dispatch: (input: UserDetailInput) => Promise<void>
 }
 
 export function useUserDetailViewModel(userId: string): UseUserDetailViewModel {

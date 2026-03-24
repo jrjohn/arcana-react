@@ -296,8 +296,8 @@ describe('LRUCacheService', () => {
       smallCache.set('keyB', 'value2')
       smallCache.set('keyC', 'value3')
 
-      // Update keyA - should move to front
-      smallCache.set('keyA', 'updated')
+      // Update keyA - should move to front (intentional duplicate key to test LRU update)
+      smallCache.set('keyA', 'updated') // NOSONAR
 
       // Add new item - keyB should be evicted
       smallCache.set('keyD', 'value4')

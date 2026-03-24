@@ -23,41 +23,41 @@ export function UserListComponent() {
   // ==========================================================================
 
   const handleRefresh = () => {
-    dispatch({ type: 'REFRESH_USERS' })
+    void dispatch({ type: 'REFRESH_USERS' })
   }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: 'SET_SEARCH_QUERY', query: e.target.value })
+    void dispatch({ type: 'SET_SEARCH_QUERY', query: e.target.value })
   }
 
   const handleClearSearch = () => {
-    dispatch({ type: 'CLEAR_SEARCH' })
+    void dispatch({ type: 'CLEAR_SEARCH' })
   }
 
   const handlePageChange = (page: number) => {
-    dispatch({ type: 'CHANGE_PAGE', page })
+    void dispatch({ type: 'CHANGE_PAGE', page })
   }
 
   const handleViewUser = (user: User) => {
-    dispatch({ type: 'NAVIGATE_TO_DETAIL', id: user.id })
+    void dispatch({ type: 'NAVIGATE_TO_DETAIL', id: user.id })
   }
 
   const handleEditUser = (user: User) => {
-    dispatch({ type: 'NAVIGATE_TO_EDIT', id: user.id })
+    void dispatch({ type: 'NAVIGATE_TO_EDIT', id: user.id })
   }
 
-  const handleDeleteUser = async (user: User) => {
+  const handleDeleteUser = (user: User) => {
     if (window.confirm(t('user.delete.message', { name: `${user.firstName} ${user.lastName}` }))) {
-      dispatch({ type: 'DELETE_USER', user })
+      void dispatch({ type: 'DELETE_USER', user })
     }
   }
 
   const handleDismissError = () => {
-    dispatch({ type: 'DISMISS_ERROR' })
+    void dispatch({ type: 'DISMISS_ERROR' })
   }
 
   const handleDismissSuccess = () => {
-    dispatch({ type: 'DISMISS_SUCCESS' })
+    void dispatch({ type: 'DISMISS_SUCCESS' })
   }
 
   // ==========================================================================

@@ -25,7 +25,7 @@ export function UserFormComponent() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    dispatch({
+    void dispatch({
       type: 'SET_FIELD',
       field: name as 'firstName' | 'lastName' | 'email' | 'avatar',
       value,
@@ -34,27 +34,27 @@ export function UserFormComponent() {
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name } = e.target
-    dispatch({
+    void dispatch({
       type: 'VALIDATE_FIELD',
       field: name as keyof UserValidationErrors,
     })
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    dispatch({ type: 'SUBMIT' })
+    void dispatch({ type: 'SUBMIT' })
   }
 
   const handleReset = () => {
-    dispatch({ type: 'RESET' })
+    void dispatch({ type: 'RESET' })
   }
 
   const handleNavigateToList = () => {
-    dispatch({ type: 'NAVIGATE_TO_LIST' })
+    void dispatch({ type: 'NAVIGATE_TO_LIST' })
   }
 
   const handleDismissError = () => {
-    dispatch({ type: 'DISMISS_ERROR' })
+    void dispatch({ type: 'DISMISS_ERROR' })
   }
 
   // ==========================================================================

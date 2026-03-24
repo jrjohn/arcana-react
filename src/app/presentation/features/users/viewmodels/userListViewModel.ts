@@ -190,7 +190,7 @@ function computePaginationInfo(currentPage: number, pageSize: number, totalItems
 
 export interface UseUserListViewModel {
   output: UserListOutput
-  dispatch: (input: UserListInput) => void
+  dispatch: (input: UserListInput) => Promise<void>
 }
 
 export function useUserListViewModel(): UseUserListViewModel {

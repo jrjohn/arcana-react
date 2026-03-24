@@ -36,24 +36,24 @@ export function UserDetailComponent() {
   // Event Handlers - dispatch Input actions
   // ==========================================================================
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (output.user && window.confirm(t('user.delete.message', { name: output.fullName }))) {
-      dispatch({ type: 'DELETE_USER' })
+      void dispatch({ type: 'DELETE_USER' })
     }
   }
 
   const handleNavigateToList = () => {
-    dispatch({ type: 'NAVIGATE_TO_LIST' })
+    void dispatch({ type: 'NAVIGATE_TO_LIST' })
   }
 
   const handleNavigateToEdit = () => {
     if (output.user) {
-      dispatch({ type: 'NAVIGATE_TO_EDIT', id: output.user.id })
+      void dispatch({ type: 'NAVIGATE_TO_EDIT', id: output.user.id })
     }
   }
 
   const handleDismissError = () => {
-    dispatch({ type: 'DISMISS_ERROR' })
+    void dispatch({ type: 'DISMISS_ERROR' })
   }
 
   // ==========================================================================
