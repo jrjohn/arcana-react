@@ -50,19 +50,19 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: Readonly<ThemeProviderProps>) {
-  const [theme, setThemeState] = useState<Theme>(loadTheme)
+  const [theme, setTheme] = useState<Theme>(loadTheme)
 
   const isDarkMode = theme === 'dark'
 
-  const setTheme = useCallback((newTheme: Theme) => {
-    setThemeState(newTheme)
+  const updateTheme = useCallback((newTheme: Theme) => {
+    setTheme(newTheme)
     localStorage.setItem(APP_CONSTANTS.STORAGE_KEYS.THEME, newTheme)
     applyTheme(newTheme)
   }, [])
 
   const toggleTheme = useCallback(() => {
-    setTheme(isDarkMode ? 'light' : 'dark')
-  }, [isDarkMode, setTheme])
+    updateTheme(isDarkMode ? 'light' : 'dark')
+  }, [isDarkMode, updateTheme])
 
   // Apply theme on mount and changes
   useEffect(() => {
@@ -75,19 +75,19 @@ export function ThemeProvider({ children }: Readonly<ThemeProviderProps>) {
     const handler = (e: MediaQueryListEvent) => {
       // Only auto-switch if user hasn't manually set a preference
       if (!localStorage.getItem(APP_CONSTANTS.STORAGE_KEYS.THEME)) {
-        setTheme(e.matches ? 'dark' : 'light')
+        updateTheme(e.matches ? 'dark' : 'light')
       }
     }
     mediaQuery.addEventListener('change', handler)
     return () => mediaQuery.removeEventListener('change', handler)
-  }, [setTheme])
+  }, [updateTheme])
 
   const value: ThemeContextType = useMemo(() => ({
     theme,
     isDarkMode,
     toggleTheme,
-    setTheme,
-  }), [theme, isDarkMode, toggleTheme, setTheme])
+    setTheme: updateTheme,
+  }), [theme, isDarkMode, toggleTheme, updateTheme])
 
   return (
     <ThemeContext.Provider value={value}>

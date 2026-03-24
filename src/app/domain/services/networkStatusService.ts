@@ -78,7 +78,7 @@ class NetworkStatusService {
    * Initialize network monitoring
    */
   private initialize(): void {
-    if (this.initialized || typeof globalThis.window === 'undefined') return
+    if (this.initialized || globalThis.window === undefined) return
     this.initialized = true
 
     // Listen for online/offline events

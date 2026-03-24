@@ -52,7 +52,7 @@ class LRUCacheService {
     this.defaultTTL = defaultTTL
 
     // Periodic cleanup of expired entries
-    if (typeof globalThis.window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       setInterval(() => this.cleanupExpired(), 60000) // Every minute
     }
   }

@@ -254,6 +254,7 @@ export function UserListComponent() {
               <div
                 key={user.id}
                 className="card mb-3 user-card"
+                role="button"
                 tabIndex={0}
                 onClick={() => handleViewUser(user)}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewUser(user) } }}
@@ -277,7 +278,7 @@ export function UserListComponent() {
                       <small className="text-muted">{user.email}</small>
                     </div>
                   </div>
-                  <div className="mt-3 d-flex gap-2" onClick={(e) => e.stopPropagation()}>
+                  <div className="mt-3 d-flex gap-2" role="toolbar" aria-label={t('table.actions')} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
                     <button
                       className="btn btn-outline-primary btn-sm flex-fill"
                       onClick={() => handleViewUser(user)}
