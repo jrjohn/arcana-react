@@ -30,8 +30,8 @@ export interface ServiceMap {
 // =============================================================================
 
 export class DIContainer {
-  private services = new Map<ServiceToken, unknown>()
-  private factories = new Map<ServiceToken, () => unknown>()
+  private readonly services = new Map<ServiceToken, unknown>()
+  private readonly factories = new Map<ServiceToken, () => unknown>()
 
   /**
    * Register a service instance

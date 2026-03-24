@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useMemo, type ReactNode } from 'react'
 import { APP_CONSTANTS } from '@core/constants/app.constants'
 
 // =============================================================================
@@ -552,7 +552,7 @@ interface I18nProviderProps {
   children: ReactNode
 }
 
-export function I18nProvider({ children }: I18nProviderProps) {
+export function I18nProvider({ children }: Readonly<I18nProviderProps>) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(loadLanguage)
 
   const currentLanguageConfig = LANGUAGES.find(l => l.code === currentLanguage)!
@@ -582,8 +582,8 @@ export function I18nProvider({ children }: I18nProviderProps) {
     // Interpolate parameters
     if (params && translation) {
       Object.entries(params).forEach(([paramKey, paramValue]) => {
-        translation = translation.replace(
-          new RegExp(`{{${paramKey}}}`, 'g'),
+        translation = translation.replaceAll(
+          `{{${paramKey}}}`,
           String(paramValue)
         )
       })
@@ -597,14 +597,14 @@ export function I18nProvider({ children }: I18nProviderProps) {
     document.documentElement.lang = currentLanguage
   }, [currentLanguage])
 
-  const value: I18nContextType = {
+  const value: I18nContextType = useMemo(() => ({
     currentLanguage,
     currentLanguageConfig,
     languages: LANGUAGES,
     setLanguage,
     t: translate,
     translate,
-  }
+  }), [currentLanguage, currentLanguageConfig, setLanguage, translate])
 
   return (
     <I18nContext.Provider value={value}>

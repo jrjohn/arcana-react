@@ -199,22 +199,20 @@ export function HomeComponent() {
               <h5 className="card-title mb-0">{t('dashboard.system.stats')}</h5>
             </div>
             <div className="card-body">
-              {systemStats.map((stat, index) => (
-                <div key={index} className="system-stat mb-3">
+              {systemStats.map((stat) => (
+                <div key={stat.label} className="system-stat mb-3">
                   <div className="d-flex justify-content-between mb-1">
                     <span className="stat-name">{stat.label}</span>
                     <span className="stat-percentage">{stat.value}%</span>
                   </div>
-                  <div className="progress" style={{ height: '8px' }}>
-                    <div
-                      className={`progress-bar progress-bar-striped progress-bar-animated ${stat.colorClass}`}
-                      role="progressbar"
-                      style={{ width: `${stat.value}%` }}
-                      aria-valuenow={stat.value}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    ></div>
-                  </div>
+                  <progress
+                    className={`progress w-100 ${stat.colorClass}`}
+                    style={{ height: '8px' }}
+                    value={stat.value}
+                    max={100}
+                  >
+                    {stat.value}%
+                  </progress>
                 </div>
               ))}
             </div>

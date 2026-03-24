@@ -44,7 +44,7 @@ interface RepositoryState {
  */
 class UserRepository {
   // Reactive state
-  private state = signal<RepositoryState>({
+  private readonly state = signal<RepositoryState>({
     loading: false,
     error: null,
     lastSync: null,
@@ -382,9 +382,7 @@ class UserRepository {
     const allCachedKey = CACHE_KEYS.ALL_USERS
     let allUsers = await indexedDbService.getCache<User[]>(allCachedKey)
 
-    if (!allUsers) {
-      allUsers = []
-    }
+    allUsers ??= []
 
     // Filter by search
     let filtered = allUsers

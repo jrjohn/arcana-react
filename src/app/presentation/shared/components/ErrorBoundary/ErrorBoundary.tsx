@@ -96,7 +96,7 @@ interface DefaultErrorFallbackProps {
   onReset: () => void
 }
 
-function DefaultErrorFallback({ error, level, onReset }: DefaultErrorFallbackProps) {
+function DefaultErrorFallback({ error, level, onReset }: Readonly<DefaultErrorFallbackProps>) {
   const isRootLevel = level === 'root'
   const isLayoutLevel = level === 'layout'
 
@@ -118,13 +118,13 @@ function DefaultErrorFallback({ error, level, onReset }: DefaultErrorFallbackPro
             </div>
           )}
           <div className="d-flex gap-2 justify-content-center">
-            <button className="btn btn-primary" onClick={() => window.location.reload()}>
-              <i className="bi bi-arrow-clockwise me-2"></i>
-              Refresh Page
+            <button className="btn btn-primary" onClick={() => globalThis.location.reload()}>
+              <i className="bi bi-arrow-clockwise me-2"></i>{' '}
+              <span>Refresh Page</span>
             </button>
             <button className="btn btn-outline-secondary" onClick={onReset}>
-              <i className="bi bi-arrow-counterclockwise me-2"></i>
-              Try Again
+              <i className="bi bi-arrow-counterclockwise me-2"></i>{' '}
+              <span>Try Again</span>
             </button>
           </div>
         </div>
@@ -151,8 +151,8 @@ function DefaultErrorFallback({ error, level, onReset }: DefaultErrorFallbackPro
                   </div>
                 )}
                 <button className="btn btn-danger mt-3" onClick={onReset}>
-                  <i className="bi bi-arrow-counterclockwise me-2"></i>
-                  Retry
+                  <i className="bi bi-arrow-counterclockwise me-2"></i>{' '}
+                  <span>Retry</span>
                 </button>
               </div>
             </div>
@@ -170,8 +170,8 @@ function DefaultErrorFallback({ error, level, onReset }: DefaultErrorFallbackPro
         <strong>Error:</strong> {error.message || 'Something went wrong'}
       </div>
       <button className="btn btn-sm btn-outline-danger ms-3" onClick={onReset}>
-        <i className="bi bi-arrow-counterclockwise me-1"></i>
-        Retry
+        <i className="bi bi-arrow-counterclockwise me-1"></i>{' '}
+        <span>Retry</span>
       </button>
     </div>
   )

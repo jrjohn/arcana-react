@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useMemo, type ReactNode } from 'react'
 import { APP_CONSTANTS } from '@core/constants/app.constants'
 
 // =============================================================================
@@ -30,14 +30,14 @@ function loadTheme(): Theme {
     return stored
   }
   // Check system preference
-  if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+  if (globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches) {
     return 'dark'
   }
   return 'light'
 }
 
 function applyTheme(theme: Theme) {
-  document.documentElement.setAttribute('data-theme', theme)
+  document.documentElement.dataset.theme = theme
   document.body.classList.toggle('dark-mode', theme === 'dark')
 }
 
@@ -49,7 +49,7 @@ interface ThemeProviderProps {
   children: ReactNode
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
+export function ThemeProvider({ children }: Readonly<ThemeProviderProps>) {
   const [theme, setThemeState] = useState<Theme>(loadTheme)
 
   const isDarkMode = theme === 'dark'
@@ -71,7 +71,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   // Listen for system theme changes
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const mediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)')
     const handler = (e: MediaQueryListEvent) => {
       // Only auto-switch if user hasn't manually set a preference
       if (!localStorage.getItem(APP_CONSTANTS.STORAGE_KEYS.THEME)) {
@@ -82,12 +82,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     return () => mediaQuery.removeEventListener('change', handler)
   }, [setTheme])
 
-  const value: ThemeContextType = {
+  const value: ThemeContextType = useMemo(() => ({
     theme,
     isDarkMode,
     toggleTheme,
     setTheme,
-  }
+  }), [theme, isDarkMode, toggleTheme, setTheme])
 
   return (
     <ThemeContext.Provider value={value}>

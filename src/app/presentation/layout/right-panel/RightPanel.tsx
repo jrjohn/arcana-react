@@ -82,7 +82,7 @@ const initialNotifications: Notification[] = [
   },
 ]
 
-export function RightPanel({ isOpen, onClose }: RightPanelProps) {
+export function RightPanel({ isOpen, onClose }: Readonly<RightPanelProps>) {
   const { t } = useI18n()
   const { isDarkMode, toggleTheme } = useTheme()
 
@@ -235,13 +235,11 @@ export function RightPanel({ isOpen, onClose }: RightPanelProps) {
                 </div>
               ) : (
                 notifications.map(notification => (
-                  <div
+                  <button
+                    type="button"
                     key={notification.id}
-                    className={`notification-item ${!notification.read ? 'unread' : ''}`}
-                    role="button"
-                    tabIndex={0}
+                    className={`notification-item ${notification.read ? '' : 'unread'}`}
                     onClick={() => markAsRead(notification)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); markAsRead(notification) } }}
                   >
                     <div className="notification-avatar">
                       {notification.avatar ? (
@@ -256,7 +254,7 @@ export function RightPanel({ isOpen, onClose }: RightPanelProps) {
                       <div className="notification-time">{notification.time}</div>
                     </div>
                     {!notification.read && <div className="unread-indicator"></div>}
-                  </div>
+                  </button>
                 ))
               )}
             </div>

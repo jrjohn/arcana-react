@@ -99,7 +99,7 @@ describe('sanitizationService', () => {
     })
 
     it('should escape double quotes', () => {
-      expect(sanitizationService.escapeQuotes('Say "Hello"')).toBe('Say \\"Hello\\"')
+      expect(sanitizationService.escapeQuotes('Say "Hello"')).toBe(String.raw`Say \"Hello\"`)
     })
   })
 
@@ -109,8 +109,8 @@ describe('sanitizationService', () => {
     })
 
     it('should escape regex special characters', () => {
-      expect(sanitizationService.sanitizeSearchQuery('test.*query')).toBe('test\\.\\*query')
-      expect(sanitizationService.sanitizeSearchQuery('hello (world)')).toBe('hello \\(world\\)')
+      expect(sanitizationService.sanitizeSearchQuery('test.*query')).toBe(String.raw`test\.\*query`)
+      expect(sanitizationService.sanitizeSearchQuery('hello (world)')).toBe(String.raw`hello \(world\)`)
     })
 
     it('should normalize whitespace', () => {

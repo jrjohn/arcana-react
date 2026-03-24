@@ -7,7 +7,6 @@ import './Header.scss'
 interface HeaderProps {
   onToggleSidebar: () => void
   onToggleRightPanel: () => void
-  rightPanelOpen: boolean
 }
 
 interface UserMenuItem {
@@ -17,7 +16,7 @@ interface UserMenuItem {
   divider?: boolean
 }
 
-export function Header({ onToggleSidebar, onToggleRightPanel }: HeaderProps) {
+export function Header({ onToggleSidebar, onToggleRightPanel }: Readonly<HeaderProps>) {
   const { currentUser, logout } = useAuth()
   const { currentLanguage, currentLanguageConfig, languages, setLanguage, t } = useI18n()
 
@@ -51,17 +50,14 @@ export function Header({ onToggleSidebar, onToggleRightPanel }: HeaderProps) {
   }, [])
 
   const handleLanguageChange = (lang: LanguageConfig) => {
-    setLanguage(lang.code as Language)
+    setLanguage(lang.code)
     setLanguageDropdownOpen(false)
   }
 
   const handleUserMenuAction = (action: string) => {
     setUserDropdownOpen(false)
-    switch (action) {
-      case 'logout':
-        logout()
-        break
-      // Other actions can be implemented later
+    if (action === 'logout') {
+      logout()
     }
   }
 

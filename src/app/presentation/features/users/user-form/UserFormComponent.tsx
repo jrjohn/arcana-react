@@ -112,10 +112,12 @@ export function UserFormComponent() {
       {/* Loading State */}
       {output.isLoading && (
         <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">{t('common.loading')}</span>
-          </div>
-          <p className="mt-3 text-muted">{t('user.form.loading')}</p>
+          <output className="d-block">
+            <div className="spinner-border text-primary">
+              <span className="visually-hidden">{t('common.loading')}</span>
+            </div>
+            <p className="mt-3 text-muted">{t('user.form.loading')}</p>
+          </output>
         </div>
       )}
 

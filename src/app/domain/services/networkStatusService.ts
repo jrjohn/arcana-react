@@ -78,12 +78,12 @@ class NetworkStatusService {
    * Initialize network monitoring
    */
   private initialize(): void {
-    if (this.initialized || typeof window === 'undefined') return
+    if (this.initialized || typeof globalThis.window === 'undefined') return
     this.initialized = true
 
     // Listen for online/offline events
-    const online$ = fromEvent(window, 'online').pipe(map(() => true))
-    const offline$ = fromEvent(window, 'offline').pipe(map(() => false))
+    const online$ = fromEvent(globalThis, 'online').pipe(map(() => true))
+    const offline$ = fromEvent(globalThis, 'offline').pipe(map(() => false))
 
     merge(online$, offline$)
       .pipe(distinctUntilChanged(), debounceTime(100))

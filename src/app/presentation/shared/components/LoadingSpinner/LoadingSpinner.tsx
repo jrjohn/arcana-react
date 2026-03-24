@@ -12,14 +12,14 @@ export function LoadingSpinner({
   message,
   fullPage = false,
   className = '',
-}: LoadingSpinnerProps) {
+}: Readonly<LoadingSpinnerProps>) {
   const spinnerContent = (
-    <div className={`loading-spinner-container ${className}`}>
-      <div className={`spinner-border text-primary spinner-${size}`} role="status">
+    <output className={`loading-spinner-container ${className}`}>
+      <div className={`spinner-border text-primary spinner-${size}`}>
         <span className="visually-hidden">Loading...</span>
       </div>
       {message && <p className="loading-message mt-3 text-muted">{message}</p>}
-    </div>
+    </output>
   )
 
   if (fullPage) {

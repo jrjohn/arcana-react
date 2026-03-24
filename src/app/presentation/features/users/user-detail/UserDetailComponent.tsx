@@ -37,7 +37,7 @@ export function UserDetailComponent() {
   // ==========================================================================
 
   const handleDelete = () => {
-    if (output.user && window.confirm(t('user.delete.message', { name: output.fullName }))) {
+    if (output.user && globalThis.confirm(t('user.delete.message', { name: output.fullName }))) {
       void dispatch({ type: 'DELETE_USER' })
     }
   }
@@ -99,10 +99,12 @@ export function UserDetailComponent() {
       {/* Loading State */}
       {output.isLoading && (
         <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">{t('common.loading')}</span>
-          </div>
-          <p className="mt-3 text-muted">{t('user.detail.loading')}</p>
+          <output className="d-block">
+            <div className="spinner-border text-primary">
+              <span className="visually-hidden">{t('common.loading')}</span>
+            </div>
+            <p className="mt-3 text-muted">{t('user.detail.loading')}</p>
+          </output>
         </div>
       )}
 
@@ -217,7 +219,7 @@ export function UserDetailComponent() {
                   >
                     {output.isDeleting ? (
                       <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                        <output className="spinner-border spinner-border-sm me-2"></output>
                         {t('common.deleting')}
                       </>
                     ) : (

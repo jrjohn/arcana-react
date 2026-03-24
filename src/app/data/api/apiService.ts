@@ -145,7 +145,7 @@ class ApiService {
     clearCsrfToken()
 
     // Dispatch custom event for auth provider to handle
-    window.dispatchEvent(new CustomEvent('auth:unauthorized'))
+    globalThis.dispatchEvent(new CustomEvent('auth:unauthorized'))
   }
 
   /**

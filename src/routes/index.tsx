@@ -39,7 +39,7 @@ const UserFormComponent = lazy(() =>
 // Loading Wrapper with Error Boundary
 // =============================================================================
 
-function LazyWrapper({ children }: { children: React.ReactNode }) {
+function LazyWrapper({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ErrorBoundary level="feature">
       <Suspense fallback={<LoadingSpinner fullPage message="Loading..." />}>{children}</Suspense>
@@ -51,7 +51,7 @@ function LazyWrapper({ children }: { children: React.ReactNode }) {
 // Placeholder Component
 // =============================================================================
 
-function PlaceholderPage({ title }: { title: string }) {
+function PlaceholderPage({ title }: Readonly<{ title: string }>) {
   return (
     <div className="container-fluid py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">

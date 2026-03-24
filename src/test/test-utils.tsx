@@ -8,7 +8,7 @@ interface AllTheProvidersProps {
   children: ReactNode
 }
 
-function AllTheProviders({ children }: AllTheProvidersProps) {
+function AllTheProviders({ children }: Readonly<AllTheProvidersProps>) {
   return (
     <BrowserRouter>
       <I18nProvider>

@@ -227,108 +227,88 @@ export function useUserListViewModel(): UseUserListViewModel {
   // Input Handler (Processes User Actions)
   // ==========================================================================
 
+  // Helper: fetch users and dispatch result
+  const fetchUsers = useCallback(
+    async (page: number, errorMessage: string) => {
+      const result = await userService.getList(
+        { page, pageSize: state.pageSize },
+        state.searchQuery || undefined
+      )
+      if (result.success && result.data) {
+        internalDispatch({ type: 'SET_USERS', payload: result.data })
+      } else {
+        internalDispatch({ type: 'SET_ERROR', payload: result.error || errorMessage })
+      }
+    },
+    [state.pageSize, state.searchQuery, userService]
+  )
+
+  // Helper: delete user
+  const handleDeleteUser = useCallback(
+    async (user: User) => {
+      const result = await userService.delete(user.id)
+      if (result.success) {
+        internalDispatch({ type: 'REMOVE_USER', payload: user.id })
+        internalDispatch({
+          type: 'SET_SUCCESS',
+          payload: `User ${user.firstName} ${user.lastName} deleted successfully`,
+        })
+        internalDispatch({
+          type: 'SET_EFFECT',
+          payload: { type: 'AUTO_DISMISS_SUCCESS', delay: 5000 },
+        })
+      } else {
+        internalDispatch({ type: 'SET_ERROR', payload: result.error || 'Failed to delete user' })
+      }
+    },
+    [userService]
+  )
+
   const dispatch = useCallback(
     async (input: UserListInput) => {
       switch (input.type) {
-        case 'LOAD_USERS': {
-          const page = input.page ?? state.currentPage
+        case 'LOAD_USERS':
           internalDispatch({ type: 'SET_LOADING', payload: true })
-
-          const result = await userService.getList(
-            { page, pageSize: state.pageSize },
-            state.searchQuery || undefined
-          )
-
-          if (result.success && result.data) {
-            internalDispatch({ type: 'SET_USERS', payload: result.data })
-          } else {
-            internalDispatch({ type: 'SET_ERROR', payload: result.error || 'Failed to load users' })
-          }
+          await fetchUsers(input.page ?? state.currentPage, 'Failed to load users')
           break
-        }
-
-        case 'REFRESH_USERS': {
+        case 'REFRESH_USERS':
           internalDispatch({ type: 'SET_REFRESHING', payload: true })
-
-          const result = await userService.getList(
-            { page: state.currentPage, pageSize: state.pageSize },
-            state.searchQuery || undefined
-          )
-
-          if (result.success && result.data) {
-            internalDispatch({ type: 'SET_USERS', payload: result.data })
-          } else {
-            internalDispatch({ type: 'SET_ERROR', payload: result.error || 'Failed to refresh users' })
-          }
+          await fetchUsers(state.currentPage, 'Failed to refresh users')
           break
-        }
-
         case 'SET_SEARCH_QUERY':
           internalDispatch({ type: 'SET_SEARCH', payload: input.query })
           break
-
         case 'CLEAR_SEARCH':
           internalDispatch({ type: 'SET_SEARCH', payload: '' })
           break
-
         case 'CHANGE_PAGE':
           if (input.page >= 1 && input.page <= state.totalPages) {
             internalDispatch({ type: 'SET_PAGE', payload: input.page })
-            // Trigger load for new page
             internalDispatch({ type: 'SET_LOADING', payload: true })
-            const result = await userService.getList(
-              { page: input.page, pageSize: state.pageSize },
-              state.searchQuery || undefined
-            )
-            if (result.success && result.data) {
-              internalDispatch({ type: 'SET_USERS', payload: result.data })
-            } else {
-              internalDispatch({ type: 'SET_ERROR', payload: result.error || 'Failed to load users' })
-            }
+            await fetchUsers(input.page, 'Failed to load users')
           }
           break
-
-        case 'DELETE_USER': {
-          const result = await userService.delete(input.user.id)
-
-          if (result.success) {
-            internalDispatch({ type: 'REMOVE_USER', payload: input.user.id })
-            internalDispatch({
-              type: 'SET_SUCCESS',
-              payload: `User ${input.user.firstName} ${input.user.lastName} deleted successfully`,
-            })
-            internalDispatch({
-              type: 'SET_EFFECT',
-              payload: { type: 'AUTO_DISMISS_SUCCESS', delay: 5000 },
-            })
-          } else {
-            internalDispatch({ type: 'SET_ERROR', payload: result.error || 'Failed to delete user' })
-          }
+        case 'DELETE_USER':
+          await handleDeleteUser(input.user)
           break
-        }
-
         case 'DISMISS_ERROR':
           internalDispatch({ type: 'SET_ERROR', payload: null })
           break
-
         case 'DISMISS_SUCCESS':
           internalDispatch({ type: 'SET_SUCCESS', payload: null })
           break
-
         case 'NAVIGATE_TO_CREATE':
           internalDispatch({ type: 'SET_EFFECT', payload: { type: 'NAVIGATE', path: '/users/new' } })
           break
-
         case 'NAVIGATE_TO_DETAIL':
           internalDispatch({ type: 'SET_EFFECT', payload: { type: 'NAVIGATE', path: `/users/${input.id}` } })
           break
-
         case 'NAVIGATE_TO_EDIT':
           internalDispatch({ type: 'SET_EFFECT', payload: { type: 'NAVIGATE', path: `/users/${input.id}/edit` } })
           break
       }
     },
-    [state.currentPage, state.pageSize, state.searchQuery, state.totalPages, userService]
+    [state.currentPage, state.totalPages, fetchUsers, handleDeleteUser]
   )
 
   // ==========================================================================

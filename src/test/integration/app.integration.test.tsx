@@ -40,7 +40,7 @@ describe('App Integration Tests', () => {
 
     it('should toggle sidebar when toggle button is clicked', async () => {
       // Mock window.innerWidth to be desktop size (so toggleSidebar affects sidebarCollapsed state)
-      Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true })
+      Object.defineProperty(globalThis, 'innerWidth', { value: 1024, writable: true })
 
       const user = userEvent.setup()
       const { container } = renderApp()

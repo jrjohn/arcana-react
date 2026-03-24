@@ -58,12 +58,10 @@ export function MainLayout() {
     <div className="main-layout">
       {/* Mobile Overlay */}
       {mobileSidebarOpen && (
-        <div
+        <button
+          type="button"
           className="mobile-overlay"
-          role="button"
-          tabIndex={0}
           onClick={closeMobileSidebar}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeMobileSidebar() } }}
           aria-label="Close sidebar"
         />
       )}
@@ -72,7 +70,6 @@ export function MainLayout() {
       <Header
         onToggleSidebar={toggleSidebar}
         onToggleRightPanel={toggleRightPanel}
-        rightPanelOpen={rightPanelOpen}
       />
 
       {/* Sidebar */}

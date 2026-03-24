@@ -24,7 +24,7 @@ describe('ThemeProvider', () => {
     localStorage.getItem = vi.fn().mockReturnValue(null)
     localStorage.setItem = vi.fn()
     // Reset document attribute
-    document.documentElement.removeAttribute('data-theme')
+    delete document.documentElement.dataset.theme
   })
 
   it('should provide default theme (light)', () => {
@@ -121,7 +121,7 @@ describe('ThemeProvider', () => {
       await user.click(screen.getByText('Set Dark'))
     })
 
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    expect(document.documentElement.dataset.theme).toBe('dark')
   })
 
   it('should throw error when useTheme is used outside provider', () => {

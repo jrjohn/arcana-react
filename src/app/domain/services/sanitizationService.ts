@@ -22,7 +22,7 @@ export const sanitizationService = {
    */
   normalizeWhitespace(input: string): string {
     if (!input) return ''
-    return input.trim().replace(/\s+/g, ' ')
+    return input.trim().replaceAll(/\s+/g, ' ')
   },
 
   /**
@@ -52,7 +52,7 @@ export const sanitizationService = {
     const trimmed = url.trim()
 
     // Ensure URL has protocol
-    if (trimmed && !trimmed.match(/^https?:\/\//i)) {
+    if (trimmed && !/^https?:\/\//i.exec(trimmed)) {
       return `https://${trimmed}`
     }
 
@@ -66,7 +66,7 @@ export const sanitizationService = {
     if (!input) return ''
     // Remove null bytes, control characters, and common injection characters
     // eslint-disable-next-line no-control-regex
-    return input.replace(/[\u0000-\u001F\u007F<>'"`;\\]/g, '')
+    return input.replaceAll(/[\u0000-\u001F\u007F<>'"`;\\]/g, '')
   },
 
   /**
@@ -74,7 +74,7 @@ export const sanitizationService = {
    */
   escapeQuotes(input: string): string {
     if (!input) return ''
-    return input.replace(/'/g, "''").replace(/"/g, '\\"')
+    return input.replaceAll("'", "''").replaceAll('"', String.raw`\"`)
   },
 
   /**
@@ -83,7 +83,7 @@ export const sanitizationService = {
   sanitizeSearchQuery(query: string): string {
     if (!query) return ''
     // Remove special regex characters and trim
-    return this.normalizeWhitespace(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return this.normalizeWhitespace(query).replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)
   },
 
   /**

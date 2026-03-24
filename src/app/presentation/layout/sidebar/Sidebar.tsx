@@ -23,7 +23,7 @@ interface SidebarProps {
   onCloseMobile: () => void
 }
 
-export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) {
+export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: Readonly<SidebarProps>) {
   const { currentUser } = useAuth()
   const { t } = useI18n()
   const location = useLocation()
@@ -167,15 +167,15 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
                   onClick={handleNavClick}
                 >
                   <i className={`${item.icon} nav-icon`}></i>
-                  {!collapsed ? (
+                  {collapsed ? (
+                    item.badge && <span className={`badge-dot ${item.badgeClass}`}></span>
+                  ) : (
                     <>
                       <span className="nav-label">{t(item.labelKey)}</span>
                       {item.badge && (
                         <span className={`badge ms-auto ${item.badgeClass}`}>{item.badge}</span>
                       )}
                     </>
-                  ) : (
-                    item.badge && <span className={`badge-dot ${item.badgeClass}`}></span>
                   )}
                 </NavLink>
               )}
@@ -195,16 +195,14 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
                 <div className="stat-value">4.2 GB / 10 GB</div>
               </div>
             </div>
-            <div className="progress" style={{ height: '4px' }}>
-              <div
-                className="progress-bar bg-primary"
-                role="progressbar"
-                style={{ width: '42%' }}
-                aria-valuenow={42}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
-            </div>
+            <progress
+              className="progress w-100"
+              style={{ height: '4px' }}
+              value={42}
+              max={100}
+            >
+              42%
+            </progress>
           </div>
         </div>
       )}

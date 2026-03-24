@@ -17,7 +17,7 @@ afterEach(() => {
 })
 
 // Component that throws an error
-function ThrowingComponent({ shouldThrow = true }: { shouldThrow?: boolean }) {
+function ThrowingComponent({ shouldThrow = true }: Readonly<{ shouldThrow?: boolean }>) {
   if (shouldThrow) {
     throw new Error('Test error message')
   }
@@ -199,7 +199,7 @@ describe('withErrorBoundary HOC', () => {
   })
 
   it('passes props to wrapped component', () => {
-    function PropsComponent({ message }: { message: string }) {
+    function PropsComponent({ message }: Readonly<{ message: string }>) {
       return <div>{message}</div>
     }
 
@@ -250,10 +250,10 @@ describe('Development Mode', () => {
 describe('Page Refresh', () => {
   it('calls reload when refresh button clicked at root level', () => {
     const reloadMock = vi.fn()
-    const originalLocation = window.location
+    const originalLocation = globalThis.location
 
-    // Mock window.location
-    Object.defineProperty(window, 'location', {
+    // Mock globalThis.location
+    Object.defineProperty(globalThis, 'location', {
       value: { ...originalLocation, reload: reloadMock },
       writable: true,
     })
@@ -268,7 +268,7 @@ describe('Page Refresh', () => {
     expect(reloadMock).toHaveBeenCalled()
 
     // Restore original location
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       value: originalLocation,
       writable: true,
     })

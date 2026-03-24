@@ -230,122 +230,114 @@ export function useUserFormViewModel(userId?: string): UseUserFormViewModel {
   // Input Handler (Processes User Actions)
   // ==========================================================================
 
+  // Helper: get field value by name
+  const getFieldValue = useCallback(
+    (field: keyof UserValidationErrors): string => {
+      const fieldMap: Record<keyof UserValidationErrors, string> = {
+        firstName: state.firstName,
+        lastName: state.lastName,
+        email: state.email,
+        avatar: state.avatar,
+      }
+      return fieldMap[field]
+    },
+    [state.firstName, state.lastName, state.email, state.avatar]
+  )
+
+  // Helper: handle form submission
+  const handleSubmit = useCallback(
+    async () => {
+      const errors = state.isEditMode
+        ? userValidator.validateUpdate({
+            firstName: state.firstName,
+            lastName: state.lastName,
+            email: state.email,
+            avatar: state.avatar || undefined,
+          })
+        : userValidator.validateCreate({
+            firstName: state.firstName,
+            lastName: state.lastName,
+            email: state.email,
+          })
+
+      if (userValidator.hasErrors(errors)) {
+        internalDispatch({ type: 'SET_ERRORS', payload: errors })
+        return
+      }
+
+      internalDispatch({ type: 'SET_SUBMITTING', payload: true })
+
+      const dto = {
+        firstName: state.firstName,
+        lastName: state.lastName,
+        email: state.email,
+        avatar: state.avatar || undefined,
+      }
+
+      const result = state.isEditMode && state.originalUser
+        ? await userService.update(state.originalUser.id, dto as UpdateUserDto)
+        : await userService.create(dto as CreateUserDto)
+
+      if (result.success && result.data) {
+        const message = state.isEditMode ? 'User updated successfully' : 'User created successfully'
+        internalDispatch({ type: 'SET_SUCCESS', payload: message })
+        internalDispatch({
+          type: 'SET_EFFECT',
+          payload: { type: 'NAVIGATE_AFTER_DELAY', path: `/users/${result.data.id}`, delay: 1500 },
+        })
+      } else {
+        const fallback = state.isEditMode ? 'Failed to update user' : 'Failed to create user'
+        internalDispatch({ type: 'SET_SUBMIT_ERROR', payload: result.error || fallback })
+      }
+    },
+    [state.firstName, state.lastName, state.email, state.avatar, state.isEditMode, state.originalUser, userService]
+  )
+
+  // Helper: load user for edit mode
+  const handleLoadUser = useCallback(
+    async (id: string) => {
+      internalDispatch({ type: 'SET_LOADING', payload: true })
+      const result = await userService.getById(id)
+      if (result.success && result.data) {
+        internalDispatch({ type: 'LOAD_USER', payload: result.data })
+      } else {
+        internalDispatch({ type: 'SET_SUBMIT_ERROR', payload: result.error || 'User not found' })
+        internalDispatch({ type: 'SET_LOADING', payload: false })
+      }
+    },
+    [userService]
+  )
+
   const dispatch = useCallback(
     async (input: UserFormInput) => {
       switch (input.type) {
         case 'SET_FIELD':
           internalDispatch({ type: 'SET_FIELD', field: input.field, value: input.value })
           break
-
         case 'VALIDATE_FIELD': {
-          const value =
-            input.field === 'firstName'
-              ? state.firstName
-              : input.field === 'lastName'
-                ? state.lastName
-                : input.field === 'email'
-                  ? state.email
-                  : state.avatar
-
+          const value = getFieldValue(input.field)
           const error = userValidator.validateField(input.field, value)
           internalDispatch({ type: 'SET_FIELD_ERROR', field: input.field, error })
           break
         }
-
-        case 'SUBMIT': {
-          // Validate form
-          const errors = state.isEditMode
-            ? userValidator.validateUpdate({
-                firstName: state.firstName,
-                lastName: state.lastName,
-                email: state.email,
-                avatar: state.avatar || undefined,
-              })
-            : userValidator.validateCreate({
-                firstName: state.firstName,
-                lastName: state.lastName,
-                email: state.email,
-              })
-
-          if (userValidator.hasErrors(errors)) {
-            internalDispatch({ type: 'SET_ERRORS', payload: errors })
-            return
-          }
-
-          internalDispatch({ type: 'SET_SUBMITTING', payload: true })
-
-          if (state.isEditMode && state.originalUser) {
-            // Update existing user
-            const dto: UpdateUserDto = {
-              firstName: state.firstName,
-              lastName: state.lastName,
-              email: state.email,
-              avatar: state.avatar || undefined,
-            }
-
-            const result = await userService.update(state.originalUser.id, dto)
-
-            if (result.success && result.data) {
-              internalDispatch({ type: 'SET_SUCCESS', payload: 'User updated successfully' })
-              internalDispatch({
-                type: 'SET_EFFECT',
-                payload: { type: 'NAVIGATE_AFTER_DELAY', path: `/users/${result.data.id}`, delay: 1500 },
-              })
-            } else {
-              internalDispatch({ type: 'SET_SUBMIT_ERROR', payload: result.error || 'Failed to update user' })
-            }
-          } else {
-            // Create new user
-            const dto: CreateUserDto = {
-              firstName: state.firstName,
-              lastName: state.lastName,
-              email: state.email,
-              avatar: state.avatar || undefined,
-            }
-
-            const result = await userService.create(dto)
-
-            if (result.success && result.data) {
-              internalDispatch({ type: 'SET_SUCCESS', payload: 'User created successfully' })
-              internalDispatch({
-                type: 'SET_EFFECT',
-                payload: { type: 'NAVIGATE_AFTER_DELAY', path: `/users/${result.data.id}`, delay: 1500 },
-              })
-            } else {
-              internalDispatch({ type: 'SET_SUBMIT_ERROR', payload: result.error || 'Failed to create user' })
-            }
-          }
+        case 'SUBMIT':
+          await handleSubmit()
           break
-        }
-
         case 'RESET':
           internalDispatch({ type: 'RESET_FORM' })
           break
-
-        case 'LOAD_USER': {
-          internalDispatch({ type: 'SET_LOADING', payload: true })
-
-          const result = await userService.getById(input.id)
-
-          if (result.success && result.data) {
-            internalDispatch({ type: 'LOAD_USER', payload: result.data })
-          } else {
-            internalDispatch({ type: 'SET_SUBMIT_ERROR', payload: result.error || 'User not found' })
-            internalDispatch({ type: 'SET_LOADING', payload: false })
-          }
+        case 'LOAD_USER':
+          await handleLoadUser(input.id)
           break
-        }
-
         case 'DISMISS_ERROR':
           internalDispatch({ type: 'SET_SUBMIT_ERROR', payload: null })
           break
-
         case 'NAVIGATE_TO_LIST':
           internalDispatch({ type: 'SET_EFFECT', payload: { type: 'NAVIGATE', path: '/users' } })
           break
       }
     },
-    [state.firstName, state.lastName, state.email, state.avatar, state.isEditMode, state.originalUser, userService]
+    [getFieldValue, handleSubmit, handleLoadUser]
   )
 
   // ==========================================================================

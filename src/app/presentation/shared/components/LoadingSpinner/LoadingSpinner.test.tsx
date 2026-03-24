@@ -4,24 +4,26 @@ import { LoadingSpinner } from './LoadingSpinner'
 
 describe('LoadingSpinner', () => {
   it('should render with default props', () => {
-    render(<LoadingSpinner />)
+    const { container } = render(<LoadingSpinner />)
 
-    const spinner = screen.getByRole('status')
+    const status = screen.getByRole('status')
+    expect(status).toBeInTheDocument()
+    const spinner = container.querySelector('.spinner-border')
     expect(spinner).toBeInTheDocument()
     expect(spinner).toHaveClass('spinner-border', 'text-primary', 'spinner-md')
   })
 
   it('should render small spinner', () => {
-    render(<LoadingSpinner size="sm" />)
+    const { container } = render(<LoadingSpinner size="sm" />)
 
-    const spinner = screen.getByRole('status')
+    const spinner = container.querySelector('.spinner-border')
     expect(spinner).toHaveClass('spinner-sm')
   })
 
   it('should render large spinner', () => {
-    render(<LoadingSpinner size="lg" />)
+    const { container } = render(<LoadingSpinner size="lg" />)
 
-    const spinner = screen.getByRole('status')
+    const spinner = container.querySelector('.spinner-border')
     expect(spinner).toHaveClass('spinner-lg')
   })
 

@@ -155,14 +155,14 @@ export const csrfTokenService = new CsrfTokenService()
  * Methods that require CSRF protection
  * GET and HEAD are safe methods and don't need CSRF tokens
  */
-const UNSAFE_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
+const UNSAFE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
 
 /**
  * Check if request method requires CSRF protection
  */
 function requiresCsrfProtection(method?: string): boolean {
   if (!method) return false
-  return UNSAFE_METHODS.includes(method.toUpperCase())
+  return UNSAFE_METHODS.has(method.toUpperCase())
 }
 
 /**

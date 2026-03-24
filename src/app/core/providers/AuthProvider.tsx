@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useMemo, type ReactNode } from 'react'
 import { APP_CONSTANTS } from '@core/constants/app.constants'
 
 // =============================================================================
@@ -76,7 +76,7 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(() => {
     const { user } = loadStoredAuth()
     return user || MOCK_USER // Auto-login for demo
@@ -118,14 +118,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setCurrentUser(prev => prev ? { ...prev, ...updates } : null)
   }, [])
 
-  const value: AuthContextType = {
+  const value: AuthContextType = useMemo(() => ({
     currentUser,
     isAuthenticated,
     token,
     login,
     logout,
     updateUser,
-  }
+  }), [currentUser, isAuthenticated, token, login, logout, updateUser])
 
   return (
     <AuthContext.Provider value={value}>

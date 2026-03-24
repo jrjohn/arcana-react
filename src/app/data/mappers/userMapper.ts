@@ -136,7 +136,7 @@ export const userMapper = {
       email: dto.email ?? user.email,
       firstName: dto.firstName ?? user.firstName,
       lastName: dto.lastName ?? user.lastName,
-      avatar: dto.avatar !== undefined ? dto.avatar : user.avatar,
+      avatar: dto.avatar ?? user.avatar,
       updatedAt: new Date(),
     }
   },

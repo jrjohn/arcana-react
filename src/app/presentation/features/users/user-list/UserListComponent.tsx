@@ -47,7 +47,7 @@ export function UserListComponent() {
   }
 
   const handleDeleteUser = (user: User) => {
-    if (window.confirm(t('user.delete.message', { name: `${user.firstName} ${user.lastName}` }))) {
+    if (globalThis.confirm(t('user.delete.message', { name: `${user.firstName} ${user.lastName}` }))) {
       void dispatch({ type: 'DELETE_USER', user })
     }
   }
@@ -145,10 +145,12 @@ export function UserListComponent() {
       {/* Loading State */}
       {output.isLoading && (
         <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">{t('common.loading')}</span>
-          </div>
-          <p className="mt-3 text-muted">{t('common.loading')}</p>
+          <output className="d-block">
+            <div className="spinner-border text-primary">
+              <span className="visually-hidden">{t('common.loading')}</span>
+            </div>
+            <p className="mt-3 text-muted">{t('common.loading')}</p>
+          </output>
         </div>
       )}
 
@@ -191,7 +193,6 @@ export function UserListComponent() {
                     <tr
                       key={user.id}
                       className="user-row"
-                      role="button"
                       tabIndex={0}
                       onClick={() => handleViewUser(user)}
                       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewUser(user) } }}
@@ -215,7 +216,7 @@ export function UserListComponent() {
                         <strong>{user.firstName} {user.lastName}</strong>
                       </td>
                       <td>{user.email}</td>
-                      <td className="text-end" role="presentation" onClick={(e) => e.stopPropagation()}>
+                      <td className="text-end" onClick={(e) => e.stopPropagation()}>
                         <div className="btn-group btn-group-sm">
                           <button
                             className="btn btn-outline-primary"
@@ -253,7 +254,6 @@ export function UserListComponent() {
               <div
                 key={user.id}
                 className="card mb-3 user-card"
-                role="button"
                 tabIndex={0}
                 onClick={() => handleViewUser(user)}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewUser(user) } }}
@@ -277,7 +277,7 @@ export function UserListComponent() {
                       <small className="text-muted">{user.email}</small>
                     </div>
                   </div>
-                  <div className="mt-3 d-flex gap-2" role="presentation" onClick={(e) => e.stopPropagation()}>
+                  <div className="mt-3 d-flex gap-2" onClick={(e) => e.stopPropagation()}>
                     <button
                       className="btn btn-outline-primary btn-sm flex-fill"
                       onClick={() => handleViewUser(user)}

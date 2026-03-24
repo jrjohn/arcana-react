@@ -27,7 +27,7 @@ interface DIProviderProps {
 // DI Provider Component
 // =============================================================================
 
-export function DIProvider({ children, container }: DIProviderProps) {
+export function DIProvider({ children, container }: Readonly<DIProviderProps>) {
   // Memoize container to prevent unnecessary re-renders
   const value = useMemo(() => container, [container])
 
