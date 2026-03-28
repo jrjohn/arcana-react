@@ -32,7 +32,7 @@ const defaultOutput: UserFormOutput = {
 let currentOutput = { ...defaultOutput }
 
 vi.mock('../viewmodels/userFormViewModel', () => ({
-  useUserFormViewModel: (_id?: string) => ({
+  useUserFormViewModel: () => ({
     output: currentOutput,
     dispatch: mockDispatch,
   }),

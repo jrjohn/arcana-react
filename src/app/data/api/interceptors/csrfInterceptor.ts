@@ -115,12 +115,7 @@ class CsrfTokenService {
    * Refresh CSRF token
    */
   private async refreshToken(): Promise<string> {
-    // In a real implementation, this would fetch from server:
-    // const response = await fetch('/api/csrf-token')
-    // const { token } = await response.json()
-
-    // For now, generate client-side token
-    // This should be replaced with server-side token in production
+    // TODO: Replace with server-side CSRF token fetch in production
     this.token = this.generateToken()
     this.tokenExpiry = Date.now() + this.TOKEN_TTL
 

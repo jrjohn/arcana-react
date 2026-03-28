@@ -100,7 +100,7 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
     }
   }, [currentUser, token])
 
-  const login = useCallback(async (_email: string, _password: string): Promise<void> => {
+  const login = useCallback(async (/* email, password */): Promise<void> => {
     // Mock login - in production, this would call an auth API
     await new Promise(resolve => setTimeout(resolve, 500))
     setCurrentUser(MOCK_USER)

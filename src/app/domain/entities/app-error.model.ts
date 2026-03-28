@@ -63,7 +63,7 @@ export class AppError extends Error {
 
     // Maintain proper stack trace (V8 engines like Chrome/Node)
     const ErrorConstructor = Error as ErrorConstructor & {
-      captureStackTrace?: (target: object, constructor: Function) => void
+      captureStackTrace?: (target: object, constructor: abstract new (...args: never[]) => object) => void
     }
     if (typeof ErrorConstructor.captureStackTrace === 'function') {
       ErrorConstructor.captureStackTrace(this, AppError)

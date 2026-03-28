@@ -37,7 +37,7 @@ const defaultOutput: UserDetailOutput = {
 let currentOutput = { ...defaultOutput }
 
 vi.mock('../viewmodels/userDetailViewModel', () => ({
-  useUserDetailViewModel: (_id: string) => ({
+  useUserDetailViewModel: () => ({
     output: currentOutput,
     dispatch: mockDispatch,
   }),
