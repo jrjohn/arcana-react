@@ -39,7 +39,7 @@ vi.mock('@/app/domain/services/networkStatusService', () => ({
 }))
 
 // Import after mocks
-import { userService } from './userServiceImpl'
+import { userService } from './impl/userServiceImpl'
 
 // ---------------------------------------------------------------------------
 // Test helpers

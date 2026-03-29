@@ -8,7 +8,7 @@ import { configureServices, configureTestServices } from './serviceConfig'
 import type { UserService } from '@/app/domain/services/userService'
 
 // Mock the real userServiceImpl to avoid real HTTP calls in unit tests
-vi.mock('@/app/data/services/userServiceImpl', () => ({
+vi.mock('@/app/data/services/impl/userServiceImpl', () => ({
   userService: {
     getById: vi.fn(),
     getList: vi.fn(),
