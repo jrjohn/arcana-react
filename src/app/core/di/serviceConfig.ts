@@ -6,7 +6,7 @@
 // =============================================================================
 
 import { DIContainer, ServiceTokens } from './container'
-import { userService } from '@/app/data/services/userServiceImpl'
+import { userService } from '@/app/data/services/impl/userServiceImpl'
 
 // =============================================================================
 // Service Registration
