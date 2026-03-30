@@ -1,4 +1,5 @@
 @use 'sass:color';
+@use './variables' as *;
 
 // =============================================================================
 // Arcana React - Main Styles
@@ -9,9 +10,6 @@
 
 // Import Bootstrap Icons
 @import 'bootstrap-icons/font/bootstrap-icons.css';
-
-// Variables
-@use './variables' as *;
 
 // -----------------------------------------------------------------------------
 // CSS Custom Properties (for runtime theming)
