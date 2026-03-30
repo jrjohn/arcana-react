@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // =============================================================================
 // Arcana React - Main Styles
 // =============================================================================
@@ -8,8 +10,8 @@
 // Import Bootstrap Icons
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
-// Import variables
-@import './variables';
+// Variables
+@use './variables' as *;
 
 // -----------------------------------------------------------------------------
 // CSS Custom Properties (for runtime theming)
@@ -74,7 +76,7 @@ a {
   text-decoration: none;
 
   &:hover {
-    color: darken($primary-blue, 10%);
+    color: color.adjust($primary-blue, $lightness: -10%);
     text-decoration: underline;
   }
 }
@@ -188,8 +190,8 @@ a {
   border-color: $primary-blue;
 
   &:hover {
-    background-color: darken($primary-blue, 7%);
-    border-color: darken($primary-blue, 10%);
+    background-color: color.adjust($primary-blue, $lightness: -7%);
+    border-color: color.adjust($primary-blue, $lightness: -10%);
   }
 }
 
@@ -212,7 +214,7 @@ a {
 // -----------------------------------------------------------------------------
 .table {
   th {
-    background: linear-gradient(180deg, $light-gray-bg 0%, darken($light-gray-bg, 3%) 100%);
+    background: linear-gradient(180deg, $light-gray-bg 0%, color.adjust($light-gray-bg, $lightness: -3%) 100%);
     text-transform: uppercase;
     font-size: 0.75rem;
     font-weight: 600;

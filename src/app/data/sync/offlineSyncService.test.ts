@@ -62,6 +62,8 @@ import { offlineSyncService, SyncStatus } from './offlineSyncService'
 describe('OfflineSyncService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     mockIsCurrentlyOnline.mockReturnValue(true)
     mockGetPendingOperations.mockResolvedValue([])
     mockGetPendingCount.mockResolvedValue(0)
