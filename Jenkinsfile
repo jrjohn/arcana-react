@@ -97,25 +97,27 @@ pipeline {
                           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"""
                         // Real quality gate: poll the CE task to completion, then
                         // fail the build if the project's quality gate is not OK.
+                        // Parsed with grep/cut (no jq — the built-in agent's sh lacks it).
                         sh '''
-                            CE_TASK=$(grep '^ceTaskId=' .scannerwork/report-task.txt | cut -d= -f2)
-                            echo "ceTaskId=$CE_TASK"
+                            set -e
+                            TOKEN="${SONAR_AUTH_TOKEN:-$SONAR_TOKEN}"
+                            RT=.scannerwork/report-task.txt
+                            [ -f "$RT" ] || { echo "report-task.txt missing"; exit 1; }
+                            CE_TASK_ID=$(grep '^ceTaskId=' "$RT" | cut -d= -f2-)
                             ANALYSIS_ID=""
                             for i in $(seq 1 60); do
-                                TASK_JSON=$(curl -fsS -u "${SONAR_AUTH_TOKEN:-$SONAR_TOKEN}:" "$SONAR_HOST_URL/api/ce/task?id=$CE_TASK")
-                                STATUS=$(echo "$TASK_JSON" | jq -r .task.status)
-                                if [ "$STATUS" = "SUCCESS" ]; then
-                                    ANALYSIS_ID=$(echo "$TASK_JSON" | jq -r .task.analysisId); break
-                                fi
-                                if [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "CANCELED" ]; then
-                                    echo "Sonar CE task $STATUS"; exit 1
-                                fi
+                                RESP=$(curl -s -u "$TOKEN:" "$SONAR_HOST_URL/api/ce/task?id=$CE_TASK_ID")
+                                ST=$(echo "$RESP" | grep -o '"status":"[A-Z_]*"' | head -1 | cut -d'"' -f4)
+                                echo "  CE status: ${ST:-?} (try $i)"
+                                if [ "$ST" = "SUCCESS" ]; then ANALYSIS_ID=$(echo "$RESP" | grep -o '"analysisId":"[^"]*"' | head -1 | cut -d'"' -f4); break;
+                                elif [ "$ST" = "FAILED" ] || [ "$ST" = "CANCELED" ]; then echo "CE $ST"; exit 1; fi
                                 sleep 5
                             done
-                            [ -n "$ANALYSIS_ID" ] || { echo "CE task did not finish in time"; exit 1; }
-                            GATE=$(curl -fsS -u "${SONAR_AUTH_TOKEN:-$SONAR_TOKEN}:" "$SONAR_HOST_URL/api/qualitygates/project_status?analysisId=$ANALYSIS_ID" | jq -r .projectStatus.status)
-                            echo "Quality Gate: $GATE"
-                            [ "$GATE" = "OK" ] || { echo "Quality gate failed: $GATE"; exit 1; }
+                            [ -n "$ANALYSIS_ID" ] || { echo "CE timeout"; exit 1; }
+                            GATE=$(curl -s -u "$TOKEN:" "$SONAR_HOST_URL/api/qualitygates/project_status?analysisId=$ANALYSIS_ID")
+                            GST=$(echo "$GATE" | grep -o '"status":"[A-Z]*"' | head -1 | cut -d'"' -f4)
+                            echo "Quality gate: ${GST:-UNKNOWN}"
+                            if [ "$GST" != "OK" ]; then echo "$GATE"; exit 1; fi
                         '''
                 }
             }
@@ -136,13 +138,11 @@ pipeline {
                     docker create --name "$C" --network devops_default \
                         -v /src -v /output \
                         "$IMG" scan /src --framework react --no-ai \
-                        --ci --format json,markdown -o /output --threshold 90
-                    tar --exclude=./.git --exclude=./node_modules --exclude=./dist --exclude=./coverage -C . -cf - . \
-                        | docker cp - "$C":/src
-                    set +e
+                        --ci --format json,markdown -o /output --threshold 90 || exit 1
+                    tar --exclude=./.git --exclude=./node_modules --exclude=./dist --exclude=./coverage --exclude=./arch-qube-reports -C . -cf - . \
+                        | docker cp - "$C":/src || exit 1
                     docker start -a "$C"
                     rc=$?
-                    set -e
                     docker cp "$C":/output/. arch-qube-reports/ 2>/dev/null || true
                     docker rm -f "$C" 2>/dev/null || true
                     exit $rc
