@@ -8,6 +8,15 @@
 [![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?logo=vite)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+<!-- agent-managed badges START -->
+[![Quality Gate](https://arcana.boo/sonarqube/api/project_badges/quality_gate?project=react-app)](https://arcana.boo/sonarqube/dashboard?id=react-app)
+[![Build](https://arcana.boo/jenkins/buildStatus/icon?job=react-app-pipeline-mb%2Fjob%2Fmain)](https://arcana.boo/jenkins/job/react-app-pipeline-mb/job/main/)
+**Rank**: Quality Gate `OK` · Build `blue` · Sonar coverage `90.2%`
+<!-- agent-managed badges END -->
+<!-- arch-rank START -->
+**Architecture**: arch-qube `100/100` · grade `A+` · `PASS`
+<!-- arch-rank END -->
+
 ## Architecture Rating
 
 | Category | Score | Notes |
