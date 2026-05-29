@@ -37,6 +37,24 @@ pipeline {
             }
         }
 
+        stage("Cleanup Old Images") {
+            steps {
+                sh '''
+                    # Remove dangling/unused images to free disk space
+                    docker image prune -f || true
+                    # Keep only last 3 build-tagged images for this app
+                    docker images --format '{{.Repository}}:{{.Tag}}' \
+                        | grep "${APP_NAME}.*build-" \
+                        | sort -t- -k2 -rn \
+                        | tail -n +4 \
+                        | xargs -r docker rmi 2>/dev/null || true
+                    # Stop leftover test containers
+                    docker compose -f docker-compose.test.yml down \
+                        --remove-orphans 2>/dev/null || true
+                '''
+            }
+        }
+
         stage("Docker Compose Build") {
             steps {
                 sh "VERSION=${VERSION} docker compose -f docker-compose.ci.yml build"
@@ -46,42 +64,89 @@ pipeline {
 
         stage("Unit Tests") {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    sh "docker compose -f docker-compose.test.yml run --rm --build test"
-                }
+                // Run tests in a NAMED (non --rm) container so coverage can be copied
+                // back into the Jenkins workspace. A host bind-mount (- ./coverage:/output)
+                // does NOT work here: Jenkins talks to the host daemon, so the mount
+                // resolves to a stray host path the workspace can't read -> coverage 0.0.
+                sh '''
+                    docker rm -f react-app-test 2>/dev/null || true
+                    set +e
+                    docker compose -f docker-compose.test.yml run --build --name react-app-test test
+                    rc=$?
+                    set -e
+                    rm -rf coverage && mkdir -p coverage
+                    docker cp react-app-test:/app/coverage/. coverage/ || true
+                    docker rm -f react-app-test 2>/dev/null || true
+                    exit $rc
+                '''
             }
         }
 
         stage("SonarQube Analysis") {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    withSonarQubeEnv('SonarQube') {
-                        script {
-                            // PR builds get PR-decoration params so SonarQube
-                            // attaches the report to the GitHub PR instead of
-                            // overwriting the long-lived main branch report.
-                            sh "sonar-scanner -Dsonar.projectKey=react-app -Dsonar.scm.disabled=true"
-                        }
-                    }
+                withSonarQubeEnv('SonarQube') {
+                        // SonarQube Community Build rejects sonar.pullrequest.*
+                        // (Developer Edition feature), so all branches run a plain
+                        // scan without GitHub PR decoration.
+                        sh """sonar-scanner \
+                          -Dsonar.projectKey=react-app \
+                          -Dsonar.projectName="React App" \
+                          -Dsonar.sources=src \
+                          -Dsonar.exclusions=node_modules/**,dist/** \
+                          -Dsonar.scm.disabled=true \
+                          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info"""
+                        // Real quality gate: poll the CE task to completion, then
+                        // fail the build if the project's quality gate is not OK.
+                        sh '''
+                            CE_TASK=$(grep '^ceTaskId=' .scannerwork/report-task.txt | cut -d= -f2)
+                            echo "ceTaskId=$CE_TASK"
+                            ANALYSIS_ID=""
+                            for i in $(seq 1 60); do
+                                TASK_JSON=$(curl -fsS -u "${SONAR_AUTH_TOKEN:-$SONAR_TOKEN}:" "$SONAR_HOST_URL/api/ce/task?id=$CE_TASK")
+                                STATUS=$(echo "$TASK_JSON" | jq -r .task.status)
+                                if [ "$STATUS" = "SUCCESS" ]; then
+                                    ANALYSIS_ID=$(echo "$TASK_JSON" | jq -r .task.analysisId); break
+                                fi
+                                if [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "CANCELED" ]; then
+                                    echo "Sonar CE task $STATUS"; exit 1
+                                fi
+                                sleep 5
+                            done
+                            [ -n "$ANALYSIS_ID" ] || { echo "CE task did not finish in time"; exit 1; }
+                            GATE=$(curl -fsS -u "${SONAR_AUTH_TOKEN:-$SONAR_TOKEN}:" "$SONAR_HOST_URL/api/qualitygates/project_status?analysisId=$ANALYSIS_ID" | jq -r .projectStatus.status)
+                            echo "Quality Gate: $GATE"
+                            [ "$GATE" = "OK" ] || { echo "Quality gate failed: $GATE"; exit 1; }
+                        '''
                 }
             }
         }
 
         stage("Architecture Qube") {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    sh """
-                        mkdir -p arch-qube-reports
-                        docker run --rm \\
-                            --network devops_default \\
-                            -v \$(pwd):/project \\
-                            -v \$(pwd)/arch-qube-reports:/output \\
-                            arcana.boo/arcana/arch-qube:latest scan /project \\
-                            --framework react --no-ai \\
-                            --ci --format json,markdown \\
-                            -o /output --threshold 90 || true
-                    """
-                }
+                // Real blocking gate. The DinD bind mount (-v $(pwd):/project) does
+                // NOT work: Jenkins talks to the host daemon, so $(pwd) resolves to a
+                // stray host path and /project is empty. Instead create a container with
+                // anonymous volumes, tar the workspace source INTO /src, run the scan,
+                // and copy the report back out. --ci makes arch-qube exit 1 below 90.
+                sh '''
+                    mkdir -p arch-qube-reports
+                    IMG=arcana.boo/arcana/arch-qube:latest
+                    C=arcana-arch-qube-react-${BUILD_NUMBER}
+                    docker rm -f "$C" 2>/dev/null || true
+                    docker create --name "$C" --network devops_default \
+                        -v /src -v /output \
+                        "$IMG" scan /src --framework react --no-ai \
+                        --ci --format json,markdown -o /output --threshold 90
+                    tar --exclude=./.git --exclude=./node_modules --exclude=./dist --exclude=./coverage -C . -cf - . \
+                        | docker cp - "$C":/src
+                    set +e
+                    docker start -a "$C"
+                    rc=$?
+                    set -e
+                    docker cp "$C":/output/. arch-qube-reports/ 2>/dev/null || true
+                    docker rm -f "$C" 2>/dev/null || true
+                    exit $rc
+                '''
             }
         }
 
