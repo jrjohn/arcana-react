@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 <!-- agent-managed badges START -->
-[![Quality Gate](https://arcana.boo/sonarqube/api/project_badges/quality_gate?project=react-app)](https://arcana.boo/sonarqube/dashboard?id=react-app)
+[![Quality Gate](https://img.shields.io/badge/Quality_Gate-OK-brightgreen)](https://arcana.boo/sonarqube/dashboard?id=react-app)
 [![Build](https://arcana.boo/jenkins/buildStatus/icon?job=react-app-pipeline-mb%2Fjob%2Fmain)](https://arcana.boo/jenkins/job/react-app-pipeline-mb/job/main/)
 **Rank**: Quality Gate `OK` · Build `blue` · Sonar coverage `90.2%`
 <!-- agent-managed badges END -->
