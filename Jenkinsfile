@@ -47,6 +47,11 @@ pipeline {
                         | sort -t- -k2 -rn \
                         | tail -n +4 \
                         | xargs -r docker rmi 2>/dev/null || true
+                    # Drop the stale static :VERSION tag left by the previous build.
+                    # Only build-* tags are pruned above; :1.0.0 otherwise persists in
+                    # the containerd image store and the next compose build's export to
+                    # the same name intermittently fails with "image already exists".
+                    docker rmi -f "${IMAGE_TAG}:${VERSION}" 2>/dev/null || true
                     # Stop leftover test containers
                     docker compose -f docker-compose.test.yml down \
                         --remove-orphans 2>/dev/null || true
