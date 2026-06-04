@@ -41,7 +41,6 @@ pipeline {
             steps {
                 sh '''
                     # Remove dangling/unused images to free disk space
-                    docker image prune -f || true
                     # Keep only last 3 build-tagged images for this app
                     docker images --format '{{.Repository}}:{{.Tag}}' \
                         | grep "${APP_NAME}.*build-" \
