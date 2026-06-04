@@ -67,15 +67,19 @@ pipeline {
                 // back into the Jenkins workspace. A host bind-mount (- ./coverage:/output)
                 // does NOT work here: Jenkins talks to the host daemon, so the mount
                 // resolves to a stray host path the workspace can't read -> coverage 0.0.
+                // The container name is namespaced per ${BUILD_NUMBER} (same pattern as
+                // the Architecture Qube stage) so concurrent builds on the shared host
+                // daemon don't collide on a static "react-app-test" name.
                 sh '''
-                    docker rm -f react-app-test 2>/dev/null || true
+                    C=react-app-test-${BUILD_NUMBER}
+                    docker rm -f "$C" 2>/dev/null || true
                     set +e
-                    docker compose -f docker-compose.test.yml run --build --name react-app-test test
+                    docker compose -f docker-compose.test.yml run --build --name "$C" test
                     rc=$?
                     set -e
                     rm -rf coverage && mkdir -p coverage
-                    docker cp react-app-test:/app/coverage/. coverage/ || true
-                    docker rm -f react-app-test 2>/dev/null || true
+                    docker cp "$C":/app/coverage/. coverage/ || true
+                    docker rm -f "$C" 2>/dev/null || true
                     exit $rc
                 '''
             }
