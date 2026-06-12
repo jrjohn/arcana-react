@@ -120,8 +120,8 @@
 
 | Category | Technology |
 |----------|------------|
-| **Framework** | React 19.1 with TypeScript 5.8 |
-| **Build Tool** | Vite 6.3 |
+| **Framework** | React 19.2 with TypeScript 5.9 |
+| **Build Tool** | Vite 7.2 |
 | **State Management** | React Hooks + useReducer (UDF pattern) |
 | **Routing** | React Router 7 |
 | **HTTP Client** | Axios with interceptors |
