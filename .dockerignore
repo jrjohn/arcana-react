@@ -1,0 +1,15 @@
+# Never copy host/committed node_modules into the image — `npm ci` installs the
+# correct platform-specific binaries (e.g. @esbuild/linux-arm64) inside the build
+# stage, and `COPY . .` must not clobber them with a committed macOS tree.
+node_modules
+**/node_modules
+
+# Build/test artifacts and VCS metadata are not needed in the build context.
+.git
+.gitignore
+dist
+coverage
+.scannerwork
+arch-qube-reports
+Dockerfile*
+.dockerignore
