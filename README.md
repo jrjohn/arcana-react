@@ -4,7 +4,7 @@
 
 [![Architecture Rating](https://img.shields.io/badge/Architecture%20Rating-⭐⭐⭐⭐⭐%209.2%2F10-gold.svg)](#architecture-evaluation)
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-8.0-646CFF?logo=vite)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -120,7 +120,7 @@
 
 | Category | Technology |
 |----------|------------|
-| **Framework** | React 19.2 with TypeScript 5.9 |
+| **Framework** | React 19.2 with TypeScript 6.0 |
 | **Build Tool** | Vite 8.0 |
 | **State Management** | React Hooks + useReducer (UDF pattern) |
 | **Routing** | React Router 7 |
