@@ -3,9 +3,9 @@
 > Enterprise-grade React reference architecture implementing Clean Architecture, Offline-First design, and MVVM Input/Output/Effect pattern.
 
 [![Architecture Rating](https://img.shields.io/badge/Architecture%20Rating-⭐⭐⭐⭐⭐%209.2%2F10-gold.svg)](#architecture-evaluation)
-[![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-8.0-646CFF?logo=vite)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjrjohn%2Farcana-react%2Fmain%2Fpackage-lock.json&query=%24.packages%5B%27node_modules%2Freact%27%5D.version&label=React&color=61DAFB&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjrjohn%2Farcana-react%2Fmain%2Fpackage-lock.json&query=%24.packages%5B%27node_modules%2Ftypescript%27%5D.version&label=TypeScript&color=3178C6&logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fjrjohn%2Farcana-react%2Fmain%2Fpackage-lock.json&query=%24.packages%5B%27node_modules%2Fvite%27%5D.version&label=Vite&color=646CFF&logo=vite)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 <!-- agent-managed badges START -->
