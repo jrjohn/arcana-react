@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/jrjohn/arcana-react/compare/v1.0.4...v1.0.5) (2026-09-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/node to v24.13.4 ([#101](https://github.com/jrjohn/arcana-react/issues/101)) ([bbddd64](https://github.com/jrjohn/arcana-react/commit/bbddd645c3b9e8bcde9c53d9e118ecb4c88adcad))
+
 ## [1.0.4](https://github.com/jrjohn/arcana-react/compare/v1.0.3...v1.0.4) (2026-09-15)
 
 
