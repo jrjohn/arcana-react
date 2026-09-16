@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.6](https://github.com/jrjohn/arcana-react/compare/v1.0.5...v1.0.6) (2026-09-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/node to v24.13.5 ([#103](https://github.com/jrjohn/arcana-react/issues/103)) ([fd4bcf7](https://github.com/jrjohn/arcana-react/commit/fd4bcf76ce74c55ffce73c205850149d8ae4abc8))
+* **deps:** update dependency dexie to v4.4.6 ([#104](https://github.com/jrjohn/arcana-react/issues/104)) ([f0fa5db](https://github.com/jrjohn/arcana-react/commit/f0fa5db5cfd9c92e1df06da563d3ad1a08213973))
+
 ## [1.0.5](https://github.com/jrjohn/arcana-react/compare/v1.0.4...v1.0.5) (2026-09-15)
 
 
