@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.7](https://github.com/jrjohn/arcana-react/compare/v1.0.6...v1.0.7) (2026-09-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency eslint-plugin-react-refresh to v0.5.7 ([#106](https://github.com/jrjohn/arcana-react/issues/106)) ([751c16b](https://github.com/jrjohn/arcana-react/commit/751c16b13394d7e0ee20a0c4d19dd640e80322d6))
+* **deps:** update dependency react-router-dom to v7.18.4 ([#107](https://github.com/jrjohn/arcana-react/issues/107)) ([dfab309](https://github.com/jrjohn/arcana-react/commit/dfab3092b6348e36f789791a0bea5e4d6edc1305))
+
 ## [1.0.6](https://github.com/jrjohn/arcana-react/compare/v1.0.5...v1.0.6) (2026-09-16)
 
 
