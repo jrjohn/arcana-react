@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8](https://github.com/jrjohn/arcana-react/compare/v1.0.7...v1.0.8) (2026-09-18)
+
+
+### Bug Fixes
+
+* **deps:** update testing-library monorepo ([#109](https://github.com/jrjohn/arcana-react/issues/109)) ([e5aaa0f](https://github.com/jrjohn/arcana-react/commit/e5aaa0fd0b17916f2eb66dd21dff370f7d381ccf))
+
 ## [1.0.7](https://github.com/jrjohn/arcana-react/compare/v1.0.6...v1.0.7) (2026-09-17)
 
 
