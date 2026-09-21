@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.11](https://github.com/jrjohn/arcana-react/compare/v1.0.10...v1.0.11) (2026-09-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @vitejs/plugin-react to v6.1.1 ([#112](https://github.com/jrjohn/arcana-react/issues/112)) ([3be8e50](https://github.com/jrjohn/arcana-react/commit/3be8e507800a81110352d375b34d6ec5e41f7359))
+* **deps:** update dependency axios to v1.20.0 ([#116](https://github.com/jrjohn/arcana-react/issues/116)) ([3b91237](https://github.com/jrjohn/arcana-react/commit/3b91237b9da2ed39b2738f5216576768b3eb5b44))
+
 ## [1.0.10](https://github.com/jrjohn/arcana-react/compare/v1.0.9...v1.0.10) (2026-09-20)
 
 
