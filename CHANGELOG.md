@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.14](https://github.com/jrjohn/arcana-react/compare/v1.0.13...v1.0.14) (2026-09-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency jsdom to v30.1.1 ([#124](https://github.com/jrjohn/arcana-react/issues/124)) ([18f1508](https://github.com/jrjohn/arcana-react/commit/18f1508c09725f114c8876f4a3cb2ca23c595950))
+* **deps:** update dependency typescript-eslint to v8.70.1 ([#125](https://github.com/jrjohn/arcana-react/issues/125)) ([97a82ea](https://github.com/jrjohn/arcana-react/commit/97a82eacbc87e04870afc8be617c83feed220edc))
+
 ## [1.0.13](https://github.com/jrjohn/arcana-react/compare/v1.0.12...v1.0.13) (2026-09-21)
 
 
