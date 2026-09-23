@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.16](https://github.com/jrjohn/arcana-react/compare/v1.0.15...v1.0.16) (2026-09-23)
+
+
+### Bug Fixes
+
+* **deps:** update react monorepo to v19.3.0 ([#130](https://github.com/jrjohn/arcana-react/issues/130)) ([7791bb1](https://github.com/jrjohn/arcana-react/commit/7791bb13117748e4f55045e0b08fdf884840a1e8))
+
 ## [1.0.15](https://github.com/jrjohn/arcana-react/compare/v1.0.14...v1.0.15) (2026-09-22)
 
 
