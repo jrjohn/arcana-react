@@ -120,7 +120,7 @@
 
 | Category | Technology |
 |----------|------------|
-| **Framework** | React 19.2 with TypeScript 6.0 |
+| **Framework** | React 19.3 with TypeScript 6.0 |
 | **Build Tool** | Vite 8.3 |
 | **State Management** | React Hooks + useReducer (UDF pattern) |
 | **Routing** | React Router 7 |
