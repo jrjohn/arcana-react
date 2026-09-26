@@ -126,7 +126,7 @@
 | **Routing** | React Router 7 |
 | **HTTP Client** | Axios with interceptors |
 | **Caching** | LRU Cache + IndexedDB (idb) |
-| **Styling** | Tailwind CSS 4 |
+| **Styling** | Bootstrap 5.3 |
 | **i18n** | react-i18next |
 | **Testing** | Vitest + React Testing Library |
 | **Reactive Streams** | RxJS 7 |
