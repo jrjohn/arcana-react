@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.20](https://github.com/jrjohn/arcana-react/compare/v1.0.19...v1.0.20) (2026-09-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency typescript-eslint to v8.71.0 ([#138](https://github.com/jrjohn/arcana-react/issues/138)) ([9d40fbb](https://github.com/jrjohn/arcana-react/commit/9d40fbbcdb5bb6b22f70111f07b6bc33ada0c143))
+
 ## [1.0.19](https://github.com/jrjohn/arcana-react/compare/v1.0.18...v1.0.19) (2026-09-26)
 
 
