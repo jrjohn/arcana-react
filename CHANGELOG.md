@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.22](https://github.com/jrjohn/arcana-react/compare/v1.0.21...v1.0.22) (2026-09-30)
+
+
+### Bug Fixes
+
+* **deps:** update vitest monorepo to v5.0.3 ([#143](https://github.com/jrjohn/arcana-react/issues/143)) ([3fc3749](https://github.com/jrjohn/arcana-react/commit/3fc3749cb9f791f6d719f95bb16fbea8e4f19365))
+
 ## [1.0.21](https://github.com/jrjohn/arcana-react/compare/v1.0.20...v1.0.21) (2026-09-29)
 
 
