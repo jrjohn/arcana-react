@@ -76,7 +76,9 @@ pipeline {
                 // the Architecture Qube stage) so concurrent builds on the shared host
                 // daemon don't collide on a static "react-app-test" name.
                 sh '''
-                    C=react-app-test-${BUILD_NUMBER}
+                    # Branch in the name: BUILD_NUMBER restarts at 1 on every branch, so concurrent builds of
+                    # two branches shared this name and one's `docker rm -f` removed the other's container.
+                    C="react-app-test-$(printf '%s' "${BRANCH_NAME}-${BUILD_NUMBER}" | tr -c 'A-Za-z0-9_.-' '-')"
                     docker rm -f "$C" 2>/dev/null || true
                     set +e
                     docker compose -f docker-compose.test.yml run --build --name "$C" test
@@ -141,7 +143,10 @@ pipeline {
                 sh '''
                     mkdir -p arch-qube-reports
                     IMG=arcana.boo/arcana/arch-qube:latest
-                    C=arcana-arch-qube-react-${BUILD_NUMBER}
+                    # Branch in the name: BUILD_NUMBER restarts at 1 on every branch, so two branches building
+                    # at once used the same name and one's `docker rm -f` deleted the other's container
+                    # (arcana-ios PR-14/PR-15, 2026-09-30: "destination ...:/src must be a directory").
+                    C="arcana-arch-qube-react-$(printf '%s' "${BRANCH_NAME}-${BUILD_NUMBER}" | tr -c 'A-Za-z0-9_.-' '-')"
                     docker rm -f "$C" 2>/dev/null || true
                     docker create --name "$C" --network devops_default \
                         -v /src -v /output \
