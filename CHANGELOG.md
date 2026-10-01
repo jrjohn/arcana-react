@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.23](https://github.com/jrjohn/arcana-react/compare/v1.0.22...v1.0.23) (2026-10-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency globals to v17.13.0 ([#146](https://github.com/jrjohn/arcana-react/issues/146)) ([caa54ac](https://github.com/jrjohn/arcana-react/commit/caa54acae127f22f0a69d71dd40c636daa832570))
+* **deps:** update dependency vite to v8.3.2 ([#145](https://github.com/jrjohn/arcana-react/issues/145)) ([678c34c](https://github.com/jrjohn/arcana-react/commit/678c34cd9e77918d1b8230203a4d1b47b43b8877))
+
 ## [1.0.22](https://github.com/jrjohn/arcana-react/compare/v1.0.21...v1.0.22) (2026-09-30)
 
 
