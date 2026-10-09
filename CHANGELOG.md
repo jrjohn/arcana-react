@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.30](https://github.com/jrjohn/arcana-react/compare/v1.0.29...v1.0.30) (2026-10-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency bootstrap-icons to v1.13.2 ([#160](https://github.com/jrjohn/arcana-react/issues/160)) ([f37e191](https://github.com/jrjohn/arcana-react/commit/f37e191d0a5cf46adb2d40dbba4b175bbe756f21))
+* **deps:** update dependency vite to v8.3.4 ([#161](https://github.com/jrjohn/arcana-react/issues/161)) ([c3cd0cc](https://github.com/jrjohn/arcana-react/commit/c3cd0ccbbd1dc14528b43ae42d08dc944d644f43))
+
 ## [1.0.29](https://github.com/jrjohn/arcana-react/compare/v1.0.28...v1.0.29) (2026-10-06)
 
 
