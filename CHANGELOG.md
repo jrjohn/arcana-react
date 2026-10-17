@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.36](https://github.com/jrjohn/arcana-react/compare/v1.0.35...v1.0.36) (2026-10-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency jsdom to v30.1.3 ([#173](https://github.com/jrjohn/arcana-react/issues/173)) ([56f1d7b](https://github.com/jrjohn/arcana-react/commit/56f1d7b0e6db15c68bc70dc58d671c55acace997))
+* **deps:** update dependency sass to v1.105.2 ([#174](https://github.com/jrjohn/arcana-react/issues/174)) ([184f826](https://github.com/jrjohn/arcana-react/commit/184f8264ad8b47f06efefb0fc5aacbb7c924736f))
+
 ## [1.0.35](https://github.com/jrjohn/arcana-react/compare/v1.0.34...v1.0.35) (2026-10-15)
 
 
