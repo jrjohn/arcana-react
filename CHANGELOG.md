@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.37](https://github.com/jrjohn/arcana-react/compare/v1.0.36...v1.0.37) (2026-10-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency dexie to v4.4.7 ([#179](https://github.com/jrjohn/arcana-react/issues/179)) ([c65a12b](https://github.com/jrjohn/arcana-react/commit/c65a12b583d6a345df229a4289b8cfdd9221278f))
+* **deps:** update dependency eslint to v10.13.0 ([#177](https://github.com/jrjohn/arcana-react/issues/177)) ([a621c62](https://github.com/jrjohn/arcana-react/commit/a621c62b881867952b3182a2447c02579b1319ed))
+* **deps:** update vitest monorepo to v5.0.5 ([#176](https://github.com/jrjohn/arcana-react/issues/176)) ([02c675d](https://github.com/jrjohn/arcana-react/commit/02c675dad37ddf789c8f2415c3a6c17a0d26ff60))
+
 ## [1.0.36](https://github.com/jrjohn/arcana-react/compare/v1.0.35...v1.0.36) (2026-10-17)
 
 
