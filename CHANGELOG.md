@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.39](https://github.com/jrjohn/arcana-react/compare/v1.0.38...v1.0.39) (2026-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sass to v1.106.0 ([#183](https://github.com/jrjohn/arcana-react/issues/183)) ([eb5f620](https://github.com/jrjohn/arcana-react/commit/eb5f620d725c332596ed0546d352d51e48a926c5))
+* **deps:** update dependency vite to v8.3.5 ([#182](https://github.com/jrjohn/arcana-react/issues/182)) ([c394ec7](https://github.com/jrjohn/arcana-react/commit/c394ec7fa76f04ae189a008a7262517bb461e30b))
+
 ## [1.0.38](https://github.com/jrjohn/arcana-react/compare/v1.0.37...v1.0.38) (2026-10-20)
 
 
