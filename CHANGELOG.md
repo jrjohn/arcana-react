@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.40](https://github.com/jrjohn/arcana-react/compare/v1.0.39...v1.0.40) (2026-10-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sass to v1.106.1 ([#185](https://github.com/jrjohn/arcana-react/issues/185)) ([ce2ad47](https://github.com/jrjohn/arcana-react/commit/ce2ad47f7ed6c9b5eaf81af83b06d1cf3e28a676))
+
 ## [1.0.39](https://github.com/jrjohn/arcana-react/compare/v1.0.38...v1.0.39) (2026-10-21)
 
 
