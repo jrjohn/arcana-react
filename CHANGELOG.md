@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.42](https://github.com/jrjohn/arcana-react/compare/v1.0.41...v1.0.42) (2026-10-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to v1.21.0 ([#189](https://github.com/jrjohn/arcana-react/issues/189)) ([c10fc0f](https://github.com/jrjohn/arcana-react/commit/c10fc0f91aeb053113e9a197711e3cc82c61fc83))
+
 ## [1.0.41](https://github.com/jrjohn/arcana-react/compare/v1.0.40...v1.0.41) (2026-10-26)
 
 
