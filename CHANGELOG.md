@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.44](https://github.com/jrjohn/arcana-react/compare/v1.0.43...v1.0.44) (2026-10-28)
+
+
+### Bug Fixes
+
+* **deps:** update node.js to v26 ([#193](https://github.com/jrjohn/arcana-react/issues/193)) ([5944f99](https://github.com/jrjohn/arcana-react/commit/5944f991958c4bab828a35e686db0ccd0beba2df))
+
 ## [1.0.43](https://github.com/jrjohn/arcana-react/compare/v1.0.42...v1.0.43) (2026-10-27)
 
 
