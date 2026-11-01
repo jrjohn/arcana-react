@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.47](https://github.com/jrjohn/arcana-react/compare/v1.0.46...v1.0.47) (2026-11-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency globals to v17.14.0 ([#201](https://github.com/jrjohn/arcana-react/issues/201)) ([f001d77](https://github.com/jrjohn/arcana-react/commit/f001d77eba3c65dbd8a6fa4ae243d01ff52fcc28))
+
 ## [1.0.46](https://github.com/jrjohn/arcana-react/compare/v1.0.45...v1.0.46) (2026-10-31)
 
 
