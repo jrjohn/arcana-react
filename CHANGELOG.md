@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.48](https://github.com/jrjohn/arcana-react/compare/v1.0.47...v1.0.48) (2026-11-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @vitejs/plugin-react to v6.2.1 ([#203](https://github.com/jrjohn/arcana-react/issues/203)) ([b1d0335](https://github.com/jrjohn/arcana-react/commit/b1d0335fb9d03e5ecc6eff77eeb7aef78efead7a))
+
 ## [1.0.47](https://github.com/jrjohn/arcana-react/compare/v1.0.46...v1.0.47) (2026-11-01)
 
 
