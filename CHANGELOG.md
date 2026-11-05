@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.50](https://github.com/jrjohn/arcana-react/compare/v1.0.49...v1.0.50) (2026-11-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency vite to v8.3.6 ([#207](https://github.com/jrjohn/arcana-react/issues/207)) ([912f58a](https://github.com/jrjohn/arcana-react/commit/912f58ae74cb805b04f1d9ffefa565e286cfdd60))
+
 ## [1.0.49](https://github.com/jrjohn/arcana-react/compare/v1.0.48...v1.0.49) (2026-11-02)
 
 
