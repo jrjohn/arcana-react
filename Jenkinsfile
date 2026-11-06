@@ -47,15 +47,24 @@ pipeline {
                         | sed 's/.*:build-//' | sort -rn | tail -n +2 \
                         | sed "s|^|${IMAGE_TAG}:build-|" \
                         | xargs -r docker rmi 2>/dev/null || true
-                    # Drop the stale static :VERSION tag left by the previous build.
-                    # Only build-* tags are pruned above; :1.0.0 otherwise persists in
-                    # the containerd image store and the next compose build's export to
-                    # the same name intermittently fails with "image already exists".
-                    docker rmi -f "${IMAGE_TAG}:${VERSION}" 2>/dev/null || true
                     # Stop leftover test containers
                     docker compose -f docker-compose.test.yml down \
                         --remove-orphans 2>/dev/null || true
                 '''
+                script {
+                    // Drop the stale static :VERSION tag left by the previous main
+                    // build. main-only: this tag has no branch/build component, so
+                    // when a PR build ran this same line concurrently with a main
+                    // build, it deleted main's freshly-built :VERSION tag before
+                    // "Push to Registry" could push it (main #235 raced with
+                    // PR-210 #1, both started 2026-11-06T00:34:37Z, build #235
+                    // failed with "tag does not exist: .../react-app:1.0.0").
+                    // PRs never push this tag (Push to Registry is `when branch
+                    // main`), so they have no reason to delete it either.
+                    if (env.BRANCH_NAME == 'main') {
+                        sh 'docker rmi -f "${IMAGE_TAG}:${VERSION}" 2>/dev/null || true'
+                    }
+                }
             }
         }
 
