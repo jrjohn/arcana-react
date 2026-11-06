@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.51](https://github.com/jrjohn/arcana-react/compare/v1.0.50...v1.0.51) (2026-11-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency jsdom to v31 ([#209](https://github.com/jrjohn/arcana-react/issues/209)) ([1fb1631](https://github.com/jrjohn/arcana-react/commit/1fb1631872d505da79fd5a2dd4b6155627a59f54))
+
 ## [1.0.50](https://github.com/jrjohn/arcana-react/compare/v1.0.49...v1.0.50) (2026-11-05)
 
 
