@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.52](https://github.com/jrjohn/arcana-react/compare/v1.0.51...v1.0.52) (2026-11-06)
+
+
+### Bug Fixes
+
+* **ci:** scope stale :VERSION tag cleanup to main branch only ([a814f66](https://github.com/jrjohn/arcana-react/commit/a814f665d7c708bc26570c290ff857a874954e68))
+
 ## [1.0.51](https://github.com/jrjohn/arcana-react/compare/v1.0.50...v1.0.51) (2026-11-05)
 
 
