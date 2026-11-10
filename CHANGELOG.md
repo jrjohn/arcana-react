@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.56](https://github.com/jrjohn/arcana-react/compare/v1.0.55...v1.0.56) (2026-11-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to v1.21.1 ([#220](https://github.com/jrjohn/arcana-react/issues/220)) ([5c8b541](https://github.com/jrjohn/arcana-react/commit/5c8b541a8e68f94ab81f3e810aa2b56ba0d15f42))
+* **deps:** update dependency typescript-eslint to v8.72.2 ([#221](https://github.com/jrjohn/arcana-react/issues/221)) ([faf7a30](https://github.com/jrjohn/arcana-react/commit/faf7a30dcd0467b3102c787f9e1641abc48df220))
+
 ## [1.0.55](https://github.com/jrjohn/arcana-react/compare/v1.0.54...v1.0.55) (2026-11-09)
 
 
