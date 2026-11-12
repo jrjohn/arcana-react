@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.60](https://github.com/jrjohn/arcana-react/compare/v1.0.59...v1.0.60) (2026-11-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @testing-library/user-event to v14.6.10 ([#230](https://github.com/jrjohn/arcana-react/issues/230)) ([e602574](https://github.com/jrjohn/arcana-react/commit/e6025745ef36d45b3b7b096803b0fea7f80be857))
+
 ## [1.0.59](https://github.com/jrjohn/arcana-react/compare/v1.0.58...v1.0.59) (2026-11-12)
 
 
