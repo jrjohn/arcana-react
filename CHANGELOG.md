@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.59](https://github.com/jrjohn/arcana-react/compare/v1.0.58...v1.0.59) (2026-11-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency bootstrap to v5.3.9 ([#228](https://github.com/jrjohn/arcana-react/issues/228)) ([7989910](https://github.com/jrjohn/arcana-react/commit/7989910f30151236b3f6e9d153b6f92b1b2599b8))
+
 ## [1.0.58](https://github.com/jrjohn/arcana-react/compare/v1.0.57...v1.0.58) (2026-11-11)
 
 
