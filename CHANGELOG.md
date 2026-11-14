@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.62](https://github.com/jrjohn/arcana-react/compare/v1.0.61...v1.0.62) (2026-11-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency eslint to v10.15.0 ([#234](https://github.com/jrjohn/arcana-react/issues/234)) ([69ece32](https://github.com/jrjohn/arcana-react/commit/69ece32edd2919fcf0eb2a86ca2bd4ab768fed09))
+
 ## [1.0.61](https://github.com/jrjohn/arcana-react/compare/v1.0.60...v1.0.61) (2026-11-13)
 
 
