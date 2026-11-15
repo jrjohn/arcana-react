@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.63](https://github.com/jrjohn/arcana-react/compare/v1.0.62...v1.0.63) (2026-11-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency eslint-plugin-react-refresh to v0.5.8 ([#236](https://github.com/jrjohn/arcana-react/issues/236)) ([8b6f72c](https://github.com/jrjohn/arcana-react/commit/8b6f72c9cb0b3e2bd32512ecda8b588029c01792))
+
 ## [1.0.62](https://github.com/jrjohn/arcana-react/compare/v1.0.61...v1.0.62) (2026-11-14)
 
 
