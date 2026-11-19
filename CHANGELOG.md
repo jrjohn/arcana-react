@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.68](https://github.com/jrjohn/arcana-react/compare/v1.0.67...v1.0.68) (2026-11-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @testing-library/jest-dom to v8 ([#246](https://github.com/jrjohn/arcana-react/issues/246)) ([e8ad95d](https://github.com/jrjohn/arcana-react/commit/e8ad95d396327c48f2040e0c834c0e5f4c7fb12c))
+* **deps:** update dependency @testing-library/user-event to v14.6.13 ([#247](https://github.com/jrjohn/arcana-react/issues/247)) ([5ec0182](https://github.com/jrjohn/arcana-react/commit/5ec01821fa899d1d94c7a510de0d069d5ab04962))
+
 ## [1.0.67](https://github.com/jrjohn/arcana-react/compare/v1.0.66...v1.0.67) (2026-11-19)
 
 
