@@ -151,7 +151,17 @@ pipeline {
                 // and copy the report back out. --ci makes arch-qube exit 1 below 90.
                 sh '''
                     mkdir -p arch-qube-reports
-                    IMG=arcana.boo/arcana/arch-qube:latest
+                    # Version pinned in tools/arch-qube.version (shared with tools/arch-check.sh).
+                    # ghcr.io first (public, multi-arch), then arcana.boo. Never :latest — a silent
+                    # fallback to latest already broke another template's CI when latest moved.
+                    V="$(tr -d '[:space:]' < tools/arch-qube.version)"
+                    IMG=""
+                    for cand in "ghcr.io/jrjohn/arch-qube:$V" "arcana.boo/arcana/arch-qube:$V"; do
+                        if docker image inspect "$cand" >/dev/null 2>&1 || docker pull -q "$cand" >/dev/null 2>&1; then
+                            IMG="$cand"; break
+                        fi
+                    done
+                    [ -n "$IMG" ] || { echo "arch-qube $V image unavailable (ghcr.io, arcana.boo) — NOT a pass"; exit 2; }
                     # Branch in the name: BUILD_NUMBER restarts at 1 on every branch, so two branches building
                     # at once used the same name and one's `docker rm -f` deleted the other's container
                     # (arcana-ios PR-14/PR-15, 2026-09-30: "destination ...:/src must be a directory").
@@ -163,8 +173,12 @@ pipeline {
                         --ci --format json,markdown -o /output --threshold 90 || exit 1
                     tar --exclude=./.git --exclude=./node_modules --exclude=./dist --exclude=./coverage --exclude=./arch-qube-reports -C . -cf - . \
                         | docker cp - "$C":/src || exit 1
+                    # set +e: Jenkins runs sh -e, so a failing scan used to abort here before the
+                    # report was copied out; rc is still the stage result below.
+                    set +e
                     docker start -a "$C"
                     rc=$?
+                    set -e
                     docker cp "$C":/output/. arch-qube-reports/ 2>/dev/null || true
                     docker rm -f "$C" 2>/dev/null || true
                     exit $rc

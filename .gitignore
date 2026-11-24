@@ -1,2 +1,5 @@
 /dist
 coverage/
+node_modules/
+.vite/
+arch-qube-reports/
