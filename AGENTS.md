@@ -90,8 +90,12 @@ Run these, in this order, and paste the last line of each into your summary:
 tools/arch-check.sh            # must print "arch-check: PASS"
 npm ci && npm run build        # tsc -b && vite build — what Dockerfile.ci runs in Jenkins "Docker Compose Build"
 npx vitest run --coverage      # Jenkins "Unit Tests" (docker-compose.test.yml)
-npx eslint <files you changed> # not a CI stage; the template has 15 pre-existing errors in `npm run lint` — add none
+npx eslint <files you changed> # not a CI stage; add no new errors (see below)
 ```
+
+`npm run lint` is not a CI stage and the template starts with 15 errors (mostly
+`react-refresh/only-export-components` on the `useXService()` hooks in `DIProvider.tsx`);
+`new-feature.sh` adds one more of that same kind per feature. Any other new error is yours.
 
 Without a local Node toolchain, run the identical lanes in Docker:
 `docker compose -f docker-compose.test.yml run --build --rm test` (tests; exits non-zero on
