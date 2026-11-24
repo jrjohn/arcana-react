@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Fast layering check on every commit (no docker, no npm). The full scan is
+# tools/arch-check.sh and the Jenkins stage "Architecture Qube". Rules: AGENTS.md §3.
+#
+# Regex, not `case` globs: in a case pattern `*` also matches `/`, so `src/*.ts` would match
+# every correctly layered file too (this exact bug false-blocked good files in another
+# template). Only ADDED files / ADDED lines are judged, so legacy code never blocks an edit.
+set -euo pipefail
+
+# Where a NEW file under src/ may live (AGENTS.md §2). One alternative per layer.
+LAYER_RE='^src/('
+LAYER_RE+='app/core/(di|constants|providers|navigation)/[^/]+'
+LAYER_RE+='|app/domain/(entities|services|validators)/[^/]+'
+LAYER_RE+='|app/data/(api|api/interceptors|mappers|repositories|storage|sync|services/impl)/[^/]+'
+LAYER_RE+='|app/data/services/[^/]+\.test\.tsx?'
+LAYER_RE+='|app/presentation/features/[a-z0-9-]+/(viewmodels/|[a-z0-9-]+/)?[^/]+'
+LAYER_RE+='|app/presentation/layout/[a-z0-9-]+/[^/]+'
+LAYER_RE+='|app/presentation/shared/components/[A-Za-z0-9]+/[^/]+'
+LAYER_RE+='|app/(core|data|domain)/index\.ts'
+LAYER_RE+='|routes/[^/]+|styles/[^/]+|assets/[^/]+|test/([a-z0-9-]+/)?[^/]+'
+LAYER_RE+=')$'
+
+DI_RE='^src/app/core/di/'
+TEST_RE='\.test\.tsx?$'
+
+fail=0
+
+# R7 — no NEW source file outside the layer directories.
+while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    [[ "$f" =~ ^src/ ]] || continue
+    if ! [[ "$f" =~ $LAYER_RE ]]; then
+        echo "pre-commit: $f — not in a layer directory (AGENTS.md §2). Use tools/new-feature.sh or move it into a layer." >&2
+        fail=1
+    fi
+done <<< "$(git diff --cached --name-only --diff-filter=AR)"
+
+# R2 / R3 — on ADDED lines only:
+#   * only src/app/core/di/ (and tests, and impl/ files themselves) may import from an impl/
+#     directory or name a concrete *Impl class;
+#   * presentation/ and routes/ must not import the data layer (concrete repositories,
+#     storage, api) — they resolve the domain service interface through the DI hooks.
+while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    [[ "$f" =~ ^src/.*\.tsx?$ ]] || continue
+    [[ "$f" =~ $TEST_RE ]] && continue
+    [[ "$f" =~ $DI_RE ]] && continue
+    added="$(git diff --cached -U0 -- "$f" | grep -E '^\+[^+]' | sed 's/^+//' | grep -vE '^[[:space:]]*(//|\*|/\*)' || true)"
+    [ -n "$added" ] || continue
+    if ! [[ "$f" =~ /impl/ ]]; then
+        hits="$(printf '%s\n' "$added" | grep -E "\\b[A-Z][A-Za-z0-9]*Impl\\b|from ['\"][^'\"]*/impl/" || true)"
+        if [ -n "$hits" ]; then
+            echo "pre-commit: $f names a concrete *Impl / imports from impl/ — only src/app/core/di/serviceConfig.ts binds implementations (AGENTS.md R2):" >&2
+            printf '    %s\n' "$hits" >&2
+            fail=1
+        fi
+    fi
+    if [[ "$f" =~ ^src/(app/presentation|routes)/ ]]; then
+        hits="$(printf '%s\n' "$added" | grep -E "from ['\"](@/app/data|@data)(/|['\"])|from ['\"](\\.\\./)+data/" || true)"
+        if [ -n "$hits" ]; then
+            echo "pre-commit: $f imports the data layer — presentation depends on domain interfaces via useXService() from @/app/core/di (AGENTS.md R3):" >&2
+            printf '    %s\n' "$hits" >&2
+            fail=1
+        fi
+    fi
+done <<< "$(git diff --cached --name-only --diff-filter=ACMR)"
+
+if [ "$fail" -ne 0 ]; then
+    echo "pre-commit: blocked. Full check: tools/arch-check.sh" >&2
+    exit 1
+fi
