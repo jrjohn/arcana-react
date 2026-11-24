@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/jrjohn/arcana-react/compare/v1.0.69...v1.1.0) (2026-11-24)
+
+
+### Features
+
+* make the template self-explaining to AI coding agents (AGENTS.md + scaffolding + arch-qube pin) ([#251](https://github.com/jrjohn/arcana-react/issues/251)) ([76f51ec](https://github.com/jrjohn/arcana-react/commit/76f51ec0148b58f413b33aa4ea837dc876845fd1))
+
 ## [1.0.69](https://github.com/jrjohn/arcana-react/compare/v1.0.68...v1.0.69) (2026-11-24)
 
 
