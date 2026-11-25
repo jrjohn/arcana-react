@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/jrjohn/arcana-react/compare/v1.1.1...v1.2.0) (2026-11-25)
+
+
+### Features
+
+* enforce arch-check locally (Claude Code Stop hook + pre-push) ([#258](https://github.com/jrjohn/arcana-react/issues/258)) ([efd0391](https://github.com/jrjohn/arcana-react/commit/efd0391c6df31715264d867a29d5dddfddafbab6))
+
 ## [1.1.1](https://github.com/jrjohn/arcana-react/compare/v1.1.0...v1.1.1) (2026-11-25)
 
 
