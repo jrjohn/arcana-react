@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/jrjohn/arcana-react/compare/v1.2.0...v1.2.1) (2026-11-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/node to v26.6.10 ([#260](https://github.com/jrjohn/arcana-react/issues/260)) ([e99f6d1](https://github.com/jrjohn/arcana-react/commit/e99f6d1336c9edcc871891406bd9c4892145f3fc))
+* **deps:** update dependency @types/react to v19.3.2 ([#261](https://github.com/jrjohn/arcana-react/issues/261)) ([9c5aea7](https://github.com/jrjohn/arcana-react/commit/9c5aea795635c3a2289aaba225f49862a8e25f28))
+
 ## [1.2.0](https://github.com/jrjohn/arcana-react/compare/v1.1.1...v1.2.0) (2026-11-25)
 
 
