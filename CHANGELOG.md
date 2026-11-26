@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/jrjohn/arcana-react/compare/v1.2.1...v1.2.2) (2026-11-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/react to v19.3.3 ([#263](https://github.com/jrjohn/arcana-react/issues/263)) ([ea37baa](https://github.com/jrjohn/arcana-react/commit/ea37baa0ca6607f7663914b1caaae7b3724406de))
+
 ## [1.2.1](https://github.com/jrjohn/arcana-react/compare/v1.2.0...v1.2.1) (2026-11-25)
 
 
