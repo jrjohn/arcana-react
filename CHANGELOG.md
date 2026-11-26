@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/jrjohn/arcana-react/compare/v1.2.2...v1.2.3) (2026-11-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-router-dom to v7.18.7 ([#264](https://github.com/jrjohn/arcana-react/issues/264)) ([c01eb55](https://github.com/jrjohn/arcana-react/commit/c01eb550fb683949f331f288f2f152928cb45ed7))
+
 ## [1.2.2](https://github.com/jrjohn/arcana-react/compare/v1.2.1...v1.2.2) (2026-11-26)
 
 
