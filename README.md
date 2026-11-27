@@ -2,23 +2,23 @@
 
 > Enterprise-grade React reference architecture implementing Clean Architecture, Offline-First design, and MVVM Input/Output/Effect pattern.
 
-[![Architecture Rating](https://img.shields.io/badge/Architecture%20Rating-⭐⭐⭐⭐⭐%209.2%2F10-gold.svg)](#architecture-evaluation)
-[![React](https://img.shields.io/badge/React-19.3.1-61DAFB?logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-8.4.0-646CFF?logo=vite)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Architecture Rating](.github/badges/architecture-rating-9-2-10-gold-svg-14cd4a12.svg)](#architecture-evaluation)
+[![React](.github/badges/react-19-3-1-61dafb-e01a63b2.svg)](https://react.dev/)
+[![TypeScript](.github/badges/typescript-6-0-3-3178c6-eda2b83b.svg)](https://www.typescriptlang.org/)
+[![Vite](.github/badges/vite-8-4-0-646cff-3ad7734f.svg)](https://vitejs.dev/)
+[![License](.github/badges/license-mit-green-svg-8fe252f7.svg)](LICENSE)
 
 <!-- agent-managed badges START -->
 <p align="center">
-  <a href="https://arcana.boo/sonarqube/dashboard?id=react-app"><img src="https://img.shields.io/badge/Quality_Gate-OK-brightgreen?style=for-the-badge" alt="Quality Gate"></a>
-  <a href="https://arcana.boo/jenkins/job/react-app-pipeline-mb/job/main/"><img src="https://img.shields.io/badge/Build-passing-brightgreen?style=for-the-badge" alt="Build"></a>
+  <a href="https://arcana.boo/sonarqube/dashboard?id=react-app"><img src=".github/badges/quality-gate-ok-brightgreen-7365c32e.svg" alt="Quality Gate"></a>
+  <a href="https://arcana.boo/jenkins/job/react-app-pipeline-mb/job/main/"><img src=".github/badges/build-passing-brightgreen-f2a434e1.svg" alt="Build"></a>
 </p>
 <!-- agent-managed badges END -->
 <!-- arch-rank START -->
 <p align="center">
-  <img src="https://img.shields.io/badge/arch--qube-100%2F100-blue?style=for-the-badge" alt="arch-qube">
-  <img src="https://img.shields.io/badge/Grade-A%2B-brightgreen?style=for-the-badge" alt="Grade">
-  <img src="https://img.shields.io/badge/Arch_Gate-PASS-brightgreen?style=for-the-badge" alt="Architecture Gate">
+  <img src=".github/badges/arch-qube-100-100-blue-2f391344.svg" alt="arch-qube">
+  <img src=".github/badges/grade-a-brightgreen-1f1e6c73.svg" alt="Grade">
+  <img src=".github/badges/arch-gate-pass-brightgreen-887cab17.svg" alt="Architecture Gate">
 </p>
 <!-- arch-rank END -->
 
