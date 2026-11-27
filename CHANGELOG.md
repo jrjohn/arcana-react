@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.5](https://github.com/jrjohn/arcana-react/compare/v1.2.4...v1.2.5) (2026-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency vite to v8.4.0 ([#271](https://github.com/jrjohn/arcana-react/issues/271)) ([a729923](https://github.com/jrjohn/arcana-react/commit/a729923382d66262504952b0eed3502f3d93c184))
+* **deps:** update vitest monorepo to v5.1.2 ([#270](https://github.com/jrjohn/arcana-react/issues/270)) ([b1ed95c](https://github.com/jrjohn/arcana-react/commit/b1ed95c28da1f7b844c7350c45301b61cbb03cc0))
+
 ## [1.2.4](https://github.com/jrjohn/arcana-react/compare/v1.2.3...v1.2.4) (2026-11-26)
 
 
